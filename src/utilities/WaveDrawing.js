@@ -7,7 +7,6 @@ export class WaveDrawing {
     this.waveHeight = 100;
     this.transitionWidth = 20;
     this.rowPadding = 10;
-    this.valueWidth = 100;
     this.nameWidth = 100;
     this.nameOffset = this.nameWidth + 20;
   }
@@ -40,9 +39,9 @@ export class WaveDrawing {
           wave.sequence[i],
           wave.type
         );
-        this.drawTransition(transitionType, i, row);
+        this.drawTransition(wave, transitionType, i, row);
       }
-      this.drawValue(wave.sequence[i], i, row);
+      this.drawValue(wave.sequence[i], wave.width, i, row);
     }
   }
 
@@ -55,11 +54,11 @@ export class WaveDrawing {
           wave.sequence[i],
           wave.type
         );
-        this.drawTransition(transitionType, i, row);
+        this.drawTransition(wave, transitionType, i, row);
       }
-      this.drawValue(0, i, row);
-      this.drawValue(1, i, row);
-      this.drawValueText(wave.sequence[i], i, row);
+      this.drawValue(0, wave.width, i, row);
+      this.drawValue(1, wave.width, i, row);
+      this.drawValueText(wave, i, row);
     }
   }
 
@@ -72,14 +71,13 @@ export class WaveDrawing {
     this.ctx.fillText(name, xOffset, yOffset);
   }
 
-  drawValueText(value, sequenceNumber, row) {
-    const textX =
-      this.getSequenceXOffset(sequenceNumber) + 0.5 * this.valueWidth;
+  drawValueText(wave, index, row) {
+    const textX = this.getSequenceXOffset(index, wave.width) + 0.5 * wave.width;
     const textY = this.getRowYOffset(row) - 0.5 * this.waveHeight; // (row + 0.5) * this.waveHeight + this.rowPadding * row;
     this.ctx.font = "12px arial";
     this.ctx.textBaseline = "middle";
     this.ctx.textAlign = "center";
-    this.ctx.fillText(`${value}`, textX, textY);
+    this.ctx.fillText(`${wave.sequence[index]}`, textX, textY);
   }
 
   getTransitionType(beforeValue, currentValue, waveType) {
@@ -125,108 +123,113 @@ export class WaveDrawing {
     this.ctx.stroke();
   }
 
-  getSequenceXOffset(sequenceNumber) {
-    return sequenceNumber * this.valueWidth + this.nameOffset;
+  getSequenceXOffset(index, width) {
+    return index * width + this.nameOffset;
   }
 
   getRowYOffset(row) {
     return row * (this.waveHeight + this.rowPadding) + this.waveHeight;
   }
 
-  drawValue(value, sequenceNumber, row) {
-    const xOffset = this.getSequenceXOffset(sequenceNumber);
+  getTransitionWidth(width) {
+    return width * 0.15;
+  }
+
+  drawValue(value, width, index, row) {
+    const xOffset = this.getSequenceXOffset(index, width);
     const yOffset = this.getRowYOffset(row);
+    const transitionWidth = this.getTransitionWidth(width);
 
     if (![0, 1].includes(value)) {
       console.log(`Error: Value is neither 0 or 1`); // zy todo expand to include Z and X
       return;
     }
 
-    const startingTransitionOffset =
-      sequenceNumber === 0 ? 0 : this.transitionWidth / 2;
-    const endingTransitionOffset = this.transitionWidth / 2;
+    const startingTransitionOffset = index === 0 ? 0 : transitionWidth / 2;
+    const endingTransitionOffset = transitionWidth / 2;
 
     const height = value ? -this.waveHeight : 0;
 
     this.drawNewLine(
       xOffset + startingTransitionOffset,
       yOffset + height,
-      xOffset + this.valueWidth - endingTransitionOffset,
+      xOffset + width - endingTransitionOffset,
       yOffset + height
     );
   }
 
-  drawTransition(type, sequenceNumber, row) {
-    const xOffset = this.getSequenceXOffset(sequenceNumber);
+  drawTransition(wave, transitionType, index, row) {
+    const xOffset = this.getSequenceXOffset(index, wave.width);
     const yOffset = this.getRowYOffset(row);
+    const transitionWidth = this.getTransitionWidth(wave.width);
 
-    switch (type) {
+    switch (transitionType) {
       case TransitionTypes.Rising:
-        this.drawRisingTransition(xOffset, yOffset);
+        this.drawRisingTransition(xOffset, yOffset, transitionWidth);
         break;
       case TransitionTypes.Falling:
-        this.drawFallingTransition(xOffset, yOffset);
+        this.drawFallingTransition(xOffset, yOffset, transitionWidth);
         break;
       case TransitionTypes.SingleBitHigh:
-        this.drawSingleBitHighTransition(xOffset, yOffset);
+        this.drawSingleBitHighTransition(xOffset, yOffset, transitionWidth);
         break;
       case TransitionTypes.SingleBitLow:
-        this.drawSingleBitLowTransition(xOffset, yOffset);
+        this.drawSingleBitLowTransition(xOffset, yOffset, transitionWidth);
         break;
       case TransitionTypes.MultiBitNone:
-        this.drawMultiBitNoneTransition(xOffset, yOffset);
+        this.drawMultiBitNoneTransition(xOffset, yOffset, transitionWidth);
         break;
       case TransitionTypes.Multi:
-        this.drawMultiBitTransition(xOffset, yOffset);
+        this.drawMultiBitTransition(xOffset, yOffset, transitionWidth);
         break;
       default:
-        console.log(`Error: Invalid transition type "${type}"`);
+        console.log(`Error: Invalid transition type.`);
     }
   }
 
-  drawSingleBitHighTransition(xOffset, yOffset) {
+  drawSingleBitHighTransition(xOffset, yOffset, transitionWidth) {
     this.drawNewLine(
-      xOffset - this.transitionWidth / 2,
+      xOffset - transitionWidth / 2,
       yOffset - this.waveHeight,
-      xOffset + this.transitionWidth / 2,
+      xOffset + transitionWidth / 2,
       yOffset - this.waveHeight
     );
   }
 
-  drawSingleBitLowTransition(xOffset, yOffset) {
+  drawSingleBitLowTransition(xOffset, yOffset, transitionWidth) {
     this.drawNewLine(
-      xOffset - this.transitionWidth / 2,
+      xOffset - transitionWidth / 2,
       yOffset,
-      xOffset + this.transitionWidth / 2,
+      xOffset + transitionWidth / 2,
       yOffset
     );
   }
 
-  drawRisingTransition(xOffset, yOffset) {
+  drawRisingTransition(xOffset, yOffset, transitionWidth) {
     this.drawNewLine(
-      xOffset - this.transitionWidth / 2,
+      xOffset - transitionWidth / 2,
       yOffset,
-      xOffset + this.transitionWidth / 2,
+      xOffset + transitionWidth / 2,
       yOffset - this.waveHeight
     );
   }
 
-  drawFallingTransition(xOffset, yOffset) {
+  drawFallingTransition(xOffset, yOffset, transitionWidth) {
     this.drawNewLine(
-      xOffset - this.transitionWidth / 2,
+      xOffset - transitionWidth / 2,
       yOffset - this.waveHeight,
-      xOffset + this.transitionWidth / 2,
+      xOffset + transitionWidth / 2,
       yOffset
     );
   }
 
-  drawMultiBitTransition(xOffset, yOffset) {
-    this.drawRisingTransition(xOffset, yOffset);
-    this.drawFallingTransition(xOffset, yOffset);
+  drawMultiBitTransition(xOffset, yOffset, transitionWidth) {
+    this.drawRisingTransition(xOffset, yOffset, transitionWidth);
+    this.drawFallingTransition(xOffset, yOffset, transitionWidth);
   }
 
-  drawMultiBitNoneTransition(xOffset, yOffset) {
-    this.drawSingleBitHighTransition(xOffset, yOffset);
-    this.drawSingleBitLowTransition(xOffset, yOffset);
+  drawMultiBitNoneTransition(xOffset, yOffset, transitionWidth) {
+    this.drawSingleBitHighTransition(xOffset, yOffset, transitionWidth);
+    this.drawSingleBitLowTransition(xOffset, yOffset, transitionWidth);
   }
 }

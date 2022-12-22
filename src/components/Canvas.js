@@ -17,11 +17,13 @@ const Canvas = (props) => {
         name: "Single-bit Wave",
         sequence: [0, 1, 0, 0, 1, 1],
         type: WaveDrawTypes.SingleBit,
+        width: 100,
       },
       {
         name: "Multi-bit Wave",
         sequence: [23, 42, 23, 23],
         type: WaveDrawTypes.MultiBit,
+        width: 100,
       },
     ];
     waveDrawing.draw(waves);
