@@ -8,16 +8,13 @@ export class WaveDrawing {
     this.transitionWidth = 20;
     this.rowPadding = 10;
     this.valueWidth = 100;
+    this.nameWidth = 100;
+    this.nameOffset = this.nameWidth + 20;
   }
 
-  draw() {
-    this.drawWave(0, {
-      sequence: [0, 1, 0, 0, 1, 1],
-      type: WaveDrawTypes.SingleBit,
-    });
-    this.drawWave(1, {
-      sequence: [23, 42, 23, 23],
-      type: WaveDrawTypes.MultiBit,
+  draw(waves) {
+    waves.forEach((wave, index) => {
+      this.drawWave(index, wave);
     });
   }
 
@@ -35,7 +32,7 @@ export class WaveDrawing {
   }
 
   drawSingleBitWave(row, wave) {
-    // zy todo Figure out how wide to make clock based on frequency
+    this.drawWaveName(row, wave.name);
     for (let i = 0; i < wave.sequence.length; i++) {
       if (i > 0) {
         const transitionType = this.getTransitionType(
@@ -50,7 +47,7 @@ export class WaveDrawing {
   }
 
   drawMultiBitWave(row, wave) {
-    // zy todo Figure out how wide to make clock based on frequency
+    this.drawWaveName(row, wave.name);
     for (let i = 0; i < wave.sequence.length; i++) {
       if (i > 0) {
         const transitionType = this.getTransitionType(
@@ -62,13 +59,23 @@ export class WaveDrawing {
       }
       this.drawValue(0, i, row);
       this.drawValue(1, i, row);
-      this.drawText(wave.sequence[i], i, row);
+      this.drawValueText(wave.sequence[i], i, row);
     }
   }
 
-  drawText(value, sequenceNumber, row) {
-    const textX = (sequenceNumber + 0.5) * this.valueWidth;
-    const textY = (row + 0.5) * this.waveHeight + this.rowPadding * row;
+  drawWaveName(row, name) {
+    const xOffset = 0;
+    const yOffset = this.getRowYOffset(row) - 0.5 * this.waveHeight;
+    this.ctx.textAlign = "start";
+    this.ctx.textBaseline = "middle";
+    this.ctx.font = "bold 16px arial";
+    this.ctx.fillText(name, xOffset, yOffset);
+  }
+
+  drawValueText(value, sequenceNumber, row) {
+    const textX =
+      this.getSequenceXOffset(sequenceNumber) + 0.5 * this.valueWidth;
+    const textY = this.getRowYOffset(row) - 0.5 * this.waveHeight; // (row + 0.5) * this.waveHeight + this.rowPadding * row;
     this.ctx.font = "12px arial";
     this.ctx.textBaseline = "middle";
     this.ctx.textAlign = "center";
@@ -118,17 +125,17 @@ export class WaveDrawing {
     this.ctx.stroke();
   }
 
-  getXOffset(sequenceNumber) {
-    return sequenceNumber * this.valueWidth;
+  getSequenceXOffset(sequenceNumber) {
+    return sequenceNumber * this.valueWidth + this.nameOffset;
   }
 
-  getYOffset(row) {
+  getRowYOffset(row) {
     return row * (this.waveHeight + this.rowPadding) + this.waveHeight;
   }
 
   drawValue(value, sequenceNumber, row) {
-    const xOffset = this.getXOffset(sequenceNumber);
-    const yOffset = this.getYOffset(row);
+    const xOffset = this.getSequenceXOffset(sequenceNumber);
+    const yOffset = this.getRowYOffset(row);
 
     if (![0, 1].includes(value)) {
       console.log(`Error: Value is neither 0 or 1`); // zy todo expand to include Z and X
@@ -150,8 +157,8 @@ export class WaveDrawing {
   }
 
   drawTransition(type, sequenceNumber, row) {
-    const xOffset = this.getXOffset(sequenceNumber);
-    const yOffset = this.getYOffset(row);
+    const xOffset = this.getSequenceXOffset(sequenceNumber);
+    const yOffset = this.getRowYOffset(row);
 
     switch (type) {
       case TransitionTypes.Rising:
