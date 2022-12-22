@@ -1,0 +1,4 @@
+- [] Make WaveDrawing accept wave logical type and conver tto wave draw-type internally
+- [] Make width a property of the wave
+- [] Replace width on the wave with frequency and make WaveDrawing figure out what the screen width should be
+- []
