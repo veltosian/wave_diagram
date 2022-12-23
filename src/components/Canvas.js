@@ -9,21 +9,23 @@ const Canvas = (props) => {
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    const ctx = canvas.getContext("2d");
-    const waveDrawing = new WaveDrawing(ctx);
+    const waveDrawing = new WaveDrawing(canvas);
 
     const waves = [
       {
         name: "Single-bit Wave",
         sequence: [0, 1, 0, 0, 1, 1],
-        type: WaveDrawTypes.SingleBit,
-        width: 100,
+        period: 2.5e-9,
+      },
+      {
+        name: "Asynchronous signal",
+        sequence: [21, 39, 39, 52],
+        period: 3e-9,
       },
       {
         name: "Multi-bit Wave",
         sequence: [23, 42, 23, 23],
-        type: WaveDrawTypes.MultiBit,
-        width: 100,
+        period: 2.5e-9,
       },
     ];
     waveDrawing.draw(waves);

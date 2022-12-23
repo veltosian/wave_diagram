@@ -1,19 +1,44 @@
 import WaveDrawTypes from "../types/WaveDrawTypes";
 import TransitionTypes from "../types/TransitionTypes";
+import WaveDrawData from "./WaveDrawData";
 
 export class WaveDrawing {
-  constructor(ctx) {
-    this.ctx = ctx;
-    this.waveHeight = 100;
-    this.transitionWidth = 20;
-    this.rowPadding = 10;
+  constructor(
+    canvas,
+    config = {
+      zoom: 1,
+      numPeriodsDefault: 20,
+      waveHeight: 70,
+      rowPadding: 15,
+    }
+  ) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext("2d");
     this.nameWidth = 100;
     this.nameOffset = this.nameWidth + 20;
+    this.config = config;
   }
 
   draw(waves) {
-    waves.forEach((wave, index) => {
+    const waveDrawingObjects = this.getDrawingObjects(waves);
+    waveDrawingObjects.forEach((wave, index) => {
       this.drawWave(index, wave);
+    });
+  }
+
+  getDrawingObjects(waves) {
+    const lowestPeriod = waves.reduce((lowestPeriod, wave) => {
+      return wave.period < lowestPeriod ? wave.period : lowestPeriod;
+    }, waves[0].period);
+
+    const basePeriodWidth = this.canvas.width / this.config.numPeriodsDefault;
+
+    return waves.map((logicalWave) => {
+      const drawingObject = new WaveDrawData(logicalWave);
+      drawingObject.setWidth(
+        (basePeriodWidth * logicalWave.period) / lowestPeriod
+      );
+      return drawingObject;
     });
   }
 
@@ -64,7 +89,7 @@ export class WaveDrawing {
 
   drawWaveName(row, name) {
     const xOffset = 0;
-    const yOffset = this.getRowYOffset(row) - 0.5 * this.waveHeight;
+    const yOffset = this.getRowYOffset(row) - 0.5 * this.config.waveHeight;
     this.ctx.textAlign = "start";
     this.ctx.textBaseline = "middle";
     this.ctx.font = "bold 16px arial";
@@ -73,7 +98,7 @@ export class WaveDrawing {
 
   drawValueText(wave, index, row) {
     const textX = this.getSequenceXOffset(index, wave.width) + 0.5 * wave.width;
-    const textY = this.getRowYOffset(row) - 0.5 * this.waveHeight; // (row + 0.5) * this.waveHeight + this.rowPadding * row;
+    const textY = this.getRowYOffset(row) - 0.5 * this.config.waveHeight; // (row + 0.5) * this.config.waveHeight + this.config.rowPadding * row;
     this.ctx.font = "12px arial";
     this.ctx.textBaseline = "middle";
     this.ctx.textAlign = "center";
@@ -128,7 +153,10 @@ export class WaveDrawing {
   }
 
   getRowYOffset(row) {
-    return row * (this.waveHeight + this.rowPadding) + this.waveHeight;
+    return (
+      row * (this.config.waveHeight + this.config.rowPadding) +
+      this.config.waveHeight
+    );
   }
 
   getTransitionWidth(width) {
@@ -148,7 +176,7 @@ export class WaveDrawing {
     const startingTransitionOffset = index === 0 ? 0 : transitionWidth / 2;
     const endingTransitionOffset = transitionWidth / 2;
 
-    const height = value ? -this.waveHeight : 0;
+    const height = value ? -this.config.waveHeight : 0;
 
     this.drawNewLine(
       xOffset + startingTransitionOffset,
@@ -190,9 +218,9 @@ export class WaveDrawing {
   drawSingleBitHighTransition(xOffset, yOffset, transitionWidth) {
     this.drawNewLine(
       xOffset - transitionWidth / 2,
-      yOffset - this.waveHeight,
+      yOffset - this.config.waveHeight,
       xOffset + transitionWidth / 2,
-      yOffset - this.waveHeight
+      yOffset - this.config.waveHeight
     );
   }
 
@@ -210,14 +238,14 @@ export class WaveDrawing {
       xOffset - transitionWidth / 2,
       yOffset,
       xOffset + transitionWidth / 2,
-      yOffset - this.waveHeight
+      yOffset - this.config.waveHeight
     );
   }
 
   drawFallingTransition(xOffset, yOffset, transitionWidth) {
     this.drawNewLine(
       xOffset - transitionWidth / 2,
-      yOffset - this.waveHeight,
+      yOffset - this.config.waveHeight,
       xOffset + transitionWidth / 2,
       yOffset
     );
