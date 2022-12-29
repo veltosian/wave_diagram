@@ -7,6 +7,7 @@ import { useState } from "react";
 
 function App() {
   const [addingNewWave, setAddingNewWave] = useState(false);
+  const [waves, setWaves] = useState([]);
 
   const handleAddNewWaveClick = () => {
     setAddingNewWave(true);
@@ -16,19 +17,35 @@ function App() {
     setAddingNewWave(false);
   };
 
+  const handleAddWave = (waveData) => {
+    const name = waveData.name;
+    const type = waveData.type;
+    const trimmedSequence = waveData.sequence.replace(/\s/g, "");
+    const sequence = trimmedSequence.split(",");
+    const period = 1e-6;
+
+    const newWave = { name, type, sequence, period };
+    setWaves((prevWaves) => {
+      return [newWave, ...prevWaves];
+    });
+  };
+
   return (
     <div>
       <Card>
         {addingNewWave ? (
           <div>
-            <WaveInput onClose={handleCloseNewWaveClick} />
+            <WaveInput
+              onClose={handleCloseNewWaveClick}
+              onAddWave={handleAddWave}
+            />
           </div>
         ) : (
           <Button onClick={handleAddNewWaveClick}>Add New Wave</Button>
         )}
       </Card>
       <Card>
-        <Canvas />
+        <Canvas waves={waves} />
       </Card>
     </div>
   );

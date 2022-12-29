@@ -8,7 +8,7 @@ function waveStateReducer(state, action) {
     case "updateName":
       return {
         ...state,
-        name: action.value,
+        name: action.value.trim(),
       };
     case "updateSequence":
       return {
@@ -26,13 +26,17 @@ function waveStateReducer(state, action) {
 }
 
 const WaveInput = (props) => {
+  const debounceTime = 400;
+
+  const validWaveTypes = ["clock", "sequential", "combinational"];
+
+  const [validSequenceFormat, setValidSequenceFormat] = useState(true);
+
   const [waveState, waveStateDispatch] = useReducer(waveStateReducer, {
     name: "",
     sequence: "",
     type: "clock",
   });
-
-  const [validSequenceFormat, setValidSequenceFormat] = useState(true);
 
   const handleNameChange = (e) => {
     waveStateDispatch({ type: "updateName", value: e.target.value });
@@ -52,7 +56,7 @@ const WaveInput = (props) => {
       } else {
         setValidSequenceFormat(true);
       }
-    }, 500);
+    }, debounceTime);
 
     return () => {
       clearTimeout(checkWaveSequence);
@@ -63,16 +67,35 @@ const WaveInput = (props) => {
     waveStateDispatch({ type: "updateType", value: e.target.value });
   };
 
+  const checkValidName = (name) => {
+    return /^\w+$/.test(name);
+  };
+
   const checkValidSequenceFormat = (sequence) => {
     const validFormat = /^\s*\d(\s*,\s*\d)*\s*$/;
     return validFormat.test(sequence);
   };
 
+  const checkValidType = (type) => {
+    return validWaveTypes.includes(type);
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(`Wave form submitted`);
-    // zy TODO Handle case with invalid sequence format
-    // props.onAddWave(waveState);
+    if (isValidateWaveState()) {
+      props.onAddWave(waveState);
+    } else {
+      alert(`Invalid wave parameters`); // zy TODO Make this a CSS animation card shake with a red X somewhere and a message appear indicating the incorrect wave parameters
+    }
+  };
+
+  const isValidateWaveState = () => {
+    let isValid = true;
+    isValid &= checkValidSequenceFormat(waveState.sequence);
+    isValid &= checkValidName(waveState.name);
+    isValid &= checkValidType(waveState.type);
+    return isValid;
   };
 
   return (
@@ -100,9 +123,14 @@ const WaveInput = (props) => {
         <span>
           <label htmlFor="wave-type">Type </label>
           <select name="wave-type" id="wave-type" onChange={handleTypeChange}>
-            <option value={"clock"}>Clock</option>
-            <option value={"combinational"}>Combinational</option>
-            <option value={"sequential"}>Sequential</option>
+            {validWaveTypes.map((type) => {
+              return (
+                <option value={type} key={type}>
+                  {type[0].toUpperCase()}
+                  {type.slice(1)}
+                </option>
+              );
+            })}
           </select>
         </span>
         <button type="submit">

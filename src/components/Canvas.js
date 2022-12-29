@@ -28,8 +28,8 @@ const Canvas = (props) => {
         period: 2.5e-9,
       },
     ];
-    waveDrawing.draw(waves);
-  }, []);
+    waveDrawing.draw(props.waves);
+  }, [props.waves]);
   return <canvas style={{ margin: "20px" }} ref={canvasRef} {...props} />;
 };
 

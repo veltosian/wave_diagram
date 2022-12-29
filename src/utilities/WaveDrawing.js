@@ -27,6 +27,9 @@ export class WaveDrawing {
   }
 
   getDrawingObjects(waves) {
+    if (waves.length === 0) {
+      return [];
+    }
     const lowestPeriod = waves.reduce((lowestPeriod, wave) => {
       return wave.period < lowestPeriod ? wave.period : lowestPeriod;
     }, waves[0].period);
