@@ -15,6 +15,11 @@ function waveStateReducer(state, action) {
         ...state,
         sequence: action.value,
       };
+    case "updateType":
+      return {
+        ...state,
+        type: action.value,
+      };
     default:
       console.error(`Invalid reducer action type`);
   }
@@ -55,7 +60,7 @@ const WaveInput = (props) => {
   }, [waveState.sequence]);
 
   const handleTypeChange = (e) => {
-    waveStateDispatch({ type: "updateSequence", value: e.target.value });
+    waveStateDispatch({ type: "updateType", value: e.target.value });
   };
 
   const checkValidSequenceFormat = (sequence) => {
@@ -89,12 +94,12 @@ const WaveInput = (props) => {
             id="Values"
             value={waveState.sequence}
             onChange={handleSequenceChange}
-            className={!validSequenceFormat ? styles["invalid-format"] : ""} // zy TODO Style not applying
+            className={!validSequenceFormat ? styles["invalid-format"] : ""}
           ></input>
         </span>
         <span>
           <label htmlFor="wave-type">Type </label>
-          <select name="wave-type" id="wave-type">
+          <select name="wave-type" id="wave-type" onChange={handleTypeChange}>
             <option value={"clock"}>Clock</option>
             <option value={"combinational"}>Combinational</option>
             <option value={"sequential"}>Sequential</option>
