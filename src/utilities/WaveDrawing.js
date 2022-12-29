@@ -7,9 +7,9 @@ export class WaveDrawing {
     canvas,
     config = {
       zoom: 1,
-      numPeriodsDefault: 20,
+      numPeriodsDefault: 30,
       waveHeight: 70,
-      rowPadding: 15,
+      rowPadding: 35,
     }
   ) {
     this.canvas = canvas;
