@@ -2,8 +2,8 @@
 - [x] Replace width on the wave with period and make WaveDrawing figure out what the width on screen should be
 - [x] Make WaveDrawing accept wave logical type and convert to wave draw-type internally
 - [x] Implement user input to add a wave
-- [] Make it so that each wave name must be unique
 - [] Add "period" to user wave input fields
+- [] Make it so that each wave name must be unique
 - [] Make incorrect wave parameter alert in WaveInput a CSS animation card shake with a red X somewhere and a message appearing that indicates the incorrect wave parameters
 - [] Continue the wave to the end of the screen at the end of the sequence
 - [] Allow wave to be dependent on another

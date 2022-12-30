@@ -38,6 +38,7 @@ function App() {
             <WaveInput
               onClose={handleCloseNewWaveClick}
               onAddWave={handleAddWave}
+              waves={waves}
             />
           </div>
         ) : (
