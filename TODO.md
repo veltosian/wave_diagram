@@ -3,7 +3,10 @@
 - [x] Make WaveDrawing accept wave logical type and convert to wave draw-type internally
 - [x] Implement user input to add a wave
 - [] Add "period" to user wave input fields
+- [] Allow user to edit a wave form after creation
 - [] Make it so that each wave name must be unique
 - [] Make incorrect wave parameter alert in WaveInput a CSS animation card shake with a red X somewhere and a message appearing that indicates the incorrect wave parameters
 - [] Continue the wave to the end of the screen at the end of the sequence
 - [] Allow wave to be dependent on another
+- [] Make WaveInput a drawer on the left side of the screen
+- [] Allow user to change value on wave by clicking on the value to change
