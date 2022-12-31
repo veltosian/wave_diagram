@@ -9,7 +9,6 @@ export class WaveDrawing {
       zoom: 1,
       numPeriodsDefault: 30,
       waveHeight: 70,
-      rowPadding: 35,
     }
   ) {
     this.canvas = canvas;
@@ -19,47 +18,38 @@ export class WaveDrawing {
     this.config = config;
   }
 
-  draw(waves) {
-    const waveDrawingObjects = this.getDrawingObjects(waves);
-    waveDrawingObjects.forEach((wave, index) => {
-      this.drawWave(index, wave);
-    });
+  draw(wave) {
+    const waveDrawingObject = this.getDrawingObject(wave);
+    this.drawWave(waveDrawingObject);
   }
 
-  getDrawingObjects(waves) {
-    if (waves.length === 0) {
-      return [];
+  getDrawingObject(wave) {
+    if (!wave) {
+      return null;
     }
-    const lowestPeriod = waves.reduce((lowestPeriod, wave) => {
-      return wave.period < lowestPeriod ? wave.period : lowestPeriod;
-    }, waves[0].period);
 
-    const basePeriodWidth = this.canvas.width / this.config.numPeriodsDefault;
+    const drawingObject = new WaveDrawData(wave);
 
-    return waves.map((logicalWave) => {
-      const drawingObject = new WaveDrawData(logicalWave);
-      drawingObject.setWidth(
-        (basePeriodWidth * logicalWave.period) / lowestPeriod
-      );
-      return drawingObject;
-    });
+    const widthFactor = this.config.zoom / wave.period;
+    drawingObject.setWidth(this.canvas.width / widthFactor);
+
+    return drawingObject;
   }
 
-  drawWave(row, wave) {
+  drawWave(wave) {
     switch (wave.type) {
       case WaveDrawTypes.SingleBit:
-        this.drawSingleBitWave(row, wave);
+        this.drawSingleBitWave(wave);
         break;
       case WaveDrawTypes.MultiBit:
-        this.drawMultiBitWave(row, wave);
+        this.drawMultiBitWave(wave);
         break;
       default:
         console.log(`Error. Unsupported wavetype: ${wave.type}`);
     }
   }
 
-  drawSingleBitWave(row, wave) {
-    this.drawWaveName(row, wave.name);
+  drawSingleBitWave(wave) {
     for (let i = 0; i < wave.sequence.length; i++) {
       if (i > 0) {
         const transitionType = this.getTransitionType(
@@ -67,14 +57,13 @@ export class WaveDrawing {
           wave.sequence[i],
           wave.type
         );
-        this.drawTransition(wave, transitionType, i, row);
+        this.drawTransition(wave, transitionType, i);
       }
-      this.drawValue(wave.sequence[i], wave.width, i, row);
+      this.drawValue(wave.sequence[i], wave.width, i);
     }
   }
 
-  drawMultiBitWave(row, wave) {
-    this.drawWaveName(row, wave.name);
+  drawMultiBitWave(wave) {
     for (let i = 0; i < wave.sequence.length; i++) {
       if (i > 0) {
         const transitionType = this.getTransitionType(
@@ -82,26 +71,17 @@ export class WaveDrawing {
           wave.sequence[i],
           wave.type
         );
-        this.drawTransition(wave, transitionType, i, row);
+        this.drawTransition(wave, transitionType, i);
       }
-      this.drawValue(0, wave.width, i, row);
-      this.drawValue(1, wave.width, i, row);
-      this.drawValueText(wave, i, row);
+      this.drawValue(0, wave.width, i);
+      this.drawValue(1, wave.width, i);
+      this.drawValueText(wave, i);
     }
   }
 
-  drawWaveName(row, name) {
-    const xOffset = 0;
-    const yOffset = this.getRowYOffset(row) - 0.5 * this.config.waveHeight;
-    this.ctx.textAlign = "start";
-    this.ctx.textBaseline = "middle";
-    this.ctx.font = "bold 16px arial";
-    this.ctx.fillText(name, xOffset, yOffset);
-  }
-
-  drawValueText(wave, index, row) {
+  drawValueText(wave, index) {
     const textX = this.getSequenceXOffset(index, wave.width) + 0.5 * wave.width;
-    const textY = this.getRowYOffset(row) - 0.5 * this.config.waveHeight; // (row + 0.5) * this.config.waveHeight + this.config.rowPadding * row;
+    const textY = this.getYOffset() - 0.5 * this.config.waveHeight; // zy TODO FIXME Make this cleaner
     this.ctx.font = "12px arial";
     this.ctx.textBaseline = "middle";
     this.ctx.textAlign = "center";
@@ -155,20 +135,17 @@ export class WaveDrawing {
     return index * width + this.nameOffset;
   }
 
-  getRowYOffset(row) {
-    return (
-      row * (this.config.waveHeight + this.config.rowPadding) +
-      this.config.waveHeight
-    );
+  getYOffset() {
+    return this.config.waveHeight;
   }
 
   getTransitionWidth(width) {
     return width * 0.15;
   }
 
-  drawValue(value, width, index, row) {
+  drawValue(value, width, index) {
     const xOffset = this.getSequenceXOffset(index, width);
-    const yOffset = this.getRowYOffset(row);
+    const yOffset = this.getYOffset();
     const transitionWidth = this.getTransitionWidth(width);
 
     if (![0, 1].includes(value)) {
@@ -189,9 +166,9 @@ export class WaveDrawing {
     );
   }
 
-  drawTransition(wave, transitionType, index, row) {
+  drawTransition(wave, transitionType, index) {
     const xOffset = this.getSequenceXOffset(index, wave.width);
-    const yOffset = this.getRowYOffset(row);
+    const yOffset = this.getYOffset();
     const transitionWidth = this.getTransitionWidth(wave.width);
 
     switch (transitionType) {
