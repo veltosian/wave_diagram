@@ -2,11 +2,14 @@
 - [x] Replace width on the wave with period and make WaveDrawing figure out what the width on screen should be
 - [x] Make WaveDrawing accept wave logical type and convert to wave draw-type internally
 - [x] Implement user input to add a wave
+- [x] Make it so that each wave name must be unique
+
+- [] Continue the wave to the end of the screen at the end of the sequence
 - [] Add "period" to user wave input fields
 - [] Allow user to edit a wave form after creation
-- [] Make it so that each wave name must be unique
 - [] Make incorrect wave parameter alert in WaveInput a CSS animation card shake with a red X somewhere and a message appearing that indicates the incorrect wave parameters
-- [] Continue the wave to the end of the screen at the end of the sequence
 - [] Allow wave to be dependent on another
 - [] Make WaveInput a drawer on the left side of the screen
 - [] Allow user to change value on wave by clicking on the value to change
+- [] Refactor drawing to make each wave it's own canvas
+  - [] Pass each wave a zoom level determined in the parent component to determine width on screen. (Based on the wave period and the zoom value). Each wave will get the same zoom level

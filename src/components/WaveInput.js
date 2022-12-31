@@ -116,57 +116,56 @@ const WaveInput = (props) => {
   };
 
   return (
-    <React.Fragment>
-      <div className={styles["new-wave-data-row"]}>
-        <form onSubmit={handleFormSubmit}>
-          <span>
-            <label htmlFor="nameInput">Name </label>
-            <input
-              type="text"
-              id="nameInput"
-              onChange={handleNameChange}
-              value={waveState.name}
-            ></input>
-          </span>
-          <span>
-            <label htmlFor="wave-type">Type </label>
-            <select
-              name="wave-type"
-              id="wave-type"
-              onChange={handleTypeChange}
-              value={waveState.type}
-            >
-              {validWaveTypes.map((type) => {
-                return (
-                  <option value={type} key={type}>
-                    {" "}
-                    {type[0].toUpperCase()}
-                    {type.slice(1)}
-                  </option>
-                );
-              })}
-            </select>
-          </span>
-          <span>
-            <label htmlFor="Values">Values </label>
-            <input
-              type="text"
-              id="Values"
-              value={waveState.sequence}
-              onChange={handleSequenceChange}
-              className={!validSequenceFormat ? styles["invalid-format"] : ""}
-            ></input>
-          </span>
-          <button type="submit">
-            <Icon variant="add"></Icon>
-          </button>
-        </form>
-        <Icon variant="close" onClick={props.onClose}></Icon>
-      </div>
-      {!isUniqueName && (
-        <FieldAlert variant="warning">Name is not unique</FieldAlert>
-      )}
-    </React.Fragment>
+    <div className={styles["new-wave-data-row"]}>
+      <form onSubmit={handleFormSubmit}>
+        <span>
+          <label htmlFor="nameInput">Name </label>
+          <input
+            className={isUniqueName ? "" : styles["invalid-input"]}
+            type="text"
+            id="nameInput"
+            onChange={handleNameChange}
+            value={waveState.name}
+          ></input>
+          {!isUniqueName && (
+            <FieldAlert variant="error"> Name is not unique</FieldAlert>
+          )}
+        </span>
+        <span>
+          <label htmlFor="wave-type">Type </label>
+          <select
+            name="wave-type"
+            id="wave-type"
+            onChange={handleTypeChange}
+            value={waveState.type}
+          >
+            {validWaveTypes.map((type) => {
+              return (
+                <option value={type} key={type}>
+                  {" "}
+                  {type[0].toUpperCase()}
+                  {type.slice(1)}
+                </option>
+              );
+            })}
+          </select>
+        </span>
+        <span>
+          <label htmlFor="Values">Values </label>
+          <input
+            type="text"
+            id="Values"
+            value={waveState.sequence}
+            onChange={handleSequenceChange}
+            className={!validSequenceFormat ? styles["invalid-input"] : ""}
+          ></input>
+        </span>
+        <button type="submit">
+          <Icon variant="add"></Icon>
+        </button>
+      </form>
+      <Icon variant="close" onClick={props.onClose}></Icon>
+    </div>
   );
 };
 
