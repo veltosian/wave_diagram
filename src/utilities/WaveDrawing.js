@@ -19,6 +19,7 @@ export class WaveDrawing {
   }
 
   draw(wave) {
+    this.clearCanvas();
     const waveDrawingObject = this.getDrawingObject(wave);
     this.drawWave(waveDrawingObject);
   }
@@ -239,5 +240,9 @@ export class WaveDrawing {
   drawMultiBitNoneTransition(xOffset, yOffset, transitionWidth) {
     this.drawSingleBitHighTransition(xOffset, yOffset, transitionWidth);
     this.drawSingleBitLowTransition(xOffset, yOffset, transitionWidth);
+  }
+
+  clearCanvas() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 }
