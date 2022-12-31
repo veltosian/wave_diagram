@@ -1,7 +1,6 @@
 import React, { useReducer, useState, useEffect } from "react";
 import Icon from "./UI/Icon";
 import styles from "./WaveInput.module.css";
-import WaveLogicTypes from "../types/WaveLogicTypes";
 import FieldAlert from "./UI/FieldAlert";
 
 function waveStateReducer(state, action) {
@@ -21,11 +20,17 @@ function waveStateReducer(state, action) {
         ...state,
         type: action.value,
       };
+    case "updatePeriod":
+      return {
+        ...state,
+        period: action.value,
+      };
     case "clear":
       return {
         name: "",
         sequence: "",
-        type: "clock",
+        type: state.type,
+        period: state.period,
       };
     default:
       console.error(`Invalid reducer action type`);
@@ -78,6 +83,10 @@ const WaveInput = (props) => {
     waveStateDispatch({ type: "updateType", value: e.target.value });
   };
 
+  const handlePeriodChange = (e) => {
+    waveStateDispatch({ type: "updatePeriod", value: e.target.value });
+  };
+
   const checkNameUnique = (name) => {
     const existingNames = props.waves.map((wave) => wave.name);
     return !existingNames.includes(name);
@@ -99,20 +108,35 @@ const WaveInput = (props) => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(`Wave form submitted`);
-    if (isValidateWaveState()) {
+    const { result: isValid, msg: msg } = isValidateWaveState();
+    if (isValid) {
       props.onAddWave(waveState);
       waveStateDispatch({ type: "clear" });
     } else {
-      alert(`Invalid wave parameters`); // zy TODO Make this a CSS animation card shake with a red X somewhere and a message appear indicating the incorrect wave parameters
+      alert(`Invalid wave parameters: ${msg}`); // zy TODO Make this a CSS animation card shake with a red X somewhere and a message appear indicating the incorrect wave parameters
     }
   };
 
   const isValidateWaveState = () => {
     let isValid = true;
-    isValid &= checkValidSequenceFormat(waveState.sequence);
-    isValid &= checkValidName(waveState.name);
-    isValid &= checkValidType(waveState.type);
-    return isValid;
+    let msg = "";
+
+    if (!checkValidSequenceFormat(waveState.sequence)) {
+      isValid = false;
+      msg += "Invalid values. ";
+    }
+
+    if (!checkValidName(waveState.name)) {
+      isValid = false;
+      msg += "Invalid name. ";
+    }
+
+    if (!checkValidType(waveState.type)) {
+      isValid = false;
+      msg += "Invalid type. ";
+    }
+
+    return { result: isValid, msg: msg };
   };
 
   return (
@@ -151,6 +175,15 @@ const WaveInput = (props) => {
           </select>
         </span>
         <span>
+          <label htmlFor="wave-period">Period (sec) </label>
+          <input
+            type="number"
+            id="wave-period"
+            value={waveState.period}
+            onChange={handlePeriodChange}
+          />
+        </span>
+        <span>
           <label htmlFor="Values">Values </label>
           <input
             type="text"
@@ -158,7 +191,7 @@ const WaveInput = (props) => {
             value={waveState.sequence}
             onChange={handleSequenceChange}
             className={!validSequenceFormat ? styles["invalid-input"] : ""}
-          ></input>
+          />
         </span>
         <button type="submit">
           <Icon variant="add"></Icon>

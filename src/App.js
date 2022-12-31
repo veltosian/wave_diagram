@@ -2,7 +2,7 @@ import "./App.css";
 import WaveInput from "./components/WaveInput";
 import Card from "./components/UI/Card";
 import Button from "./components/UI/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WaveCanvas from "./components/WaveCanvas";
 
 function App() {
@@ -15,10 +15,10 @@ function App() {
       sequence: [1, 2, 2, 4],
     },
   ]); // zy DEBUG Data. REMOVE
-  const waveCanvasConfig = {
+  const [waveCanvasConfig, setWaveCanvasConfig] = useState({
     zoom: 25e-9,
     waveHeight: 70,
-  };
+  });
 
   const handleAddNewWaveClick = () => {
     setAddingNewWave(true);
@@ -33,13 +33,24 @@ function App() {
     const type = waveData.type;
     const trimmedSequence = waveData.sequence.replace(/\s/g, "");
     const sequence = trimmedSequence.split(",");
-    const period = 1e-6;
+    const period = waveData.period;
 
     const newWave = { name, type, sequence, period };
     setWaves((prevWaves) => {
       return [newWave, ...prevWaves];
     });
   };
+
+  useEffect(() => {
+    // Find zoom level for first wave
+    const zoom = waves[0].period * 20;
+    setWaveCanvasConfig((prevState) => {
+      return {
+        ...prevState,
+        zoom: zoom,
+      };
+    });
+  }, [waves[0]]);
 
   return (
     <div>
