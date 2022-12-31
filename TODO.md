@@ -13,3 +13,4 @@
 - [] Allow user to change value on wave by clicking on the value to change
 - [] Refactor drawing to make each wave it's own canvas
   - [] Pass each wave a zoom level determined in the parent component to determine width on screen. (Based on the wave period and the zoom value). Each wave will get the same zoom level
+- [] Dynamically determine wave height in the canvases
