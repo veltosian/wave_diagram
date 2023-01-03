@@ -74,8 +74,8 @@ export class WaveDrawing {
         );
         this.drawTransition(wave, transitionType, i);
       }
-      this.drawValue(0, wave.width, i);
-      this.drawValue(1, wave.width, i);
+      this.drawValue("0", wave.width, i);
+      this.drawValue("1", wave.width, i);
       this.drawValueText(wave, i);
     }
   }
@@ -86,7 +86,7 @@ export class WaveDrawing {
     this.ctx.font = "12px arial";
     this.ctx.textBaseline = "middle";
     this.ctx.textAlign = "center";
-    this.ctx.fillText(`${wave.sequence[index]}`, textX, textY);
+    this.ctx.fillText(wave.sequence[index], textX, textY);
   }
 
   getTransitionType(beforeValue, currentValue, waveType) {
@@ -103,11 +103,11 @@ export class WaveDrawing {
   }
 
   getSingleBitTransitionType(beforeValue, currentValue) {
-    if (beforeValue === 1 && currentValue === 1) {
+    if (beforeValue === "1" && currentValue === "1") {
       return TransitionTypes.SingleBitHigh;
     }
 
-    if (beforeValue === 0 && currentValue === 0) {
+    if (beforeValue === "0" && currentValue === "0") {
       return TransitionTypes.SingleBitLow;
     }
 
@@ -149,7 +149,7 @@ export class WaveDrawing {
     const yOffset = this.getYOffset();
     const transitionWidth = this.getTransitionWidth(width);
 
-    if (![0, 1].includes(value)) {
+    if (!["0", "1"].includes(value)) {
       console.log(`Error: Value is neither 0 or 1`); // zy todo expand to include Z and X
       return;
     }
@@ -157,7 +157,7 @@ export class WaveDrawing {
     const startingTransitionOffset = index === 0 ? 0 : transitionWidth / 2;
     const endingTransitionOffset = transitionWidth / 2;
 
-    const height = value ? -this.config.waveHeight : 0;
+    const height = value === "1" ? -this.config.waveHeight : 0;
 
     this.drawNewLine(
       xOffset + startingTransitionOffset,

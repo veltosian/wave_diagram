@@ -14,7 +14,7 @@ class WaveDrawData {
   }
 
   getType(sequence) {
-    if (sequence.every((val) => val === 0 || val === 1)) {
+    if (sequence.every((val) => val === "0" || val === "1")) {
       return WaveDrawTypes.SingleBit;
     }
     return WaveDrawTypes.MultiBit;
