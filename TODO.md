@@ -3,13 +3,19 @@
 - [x] Make WaveDrawing accept wave logical type and convert to wave draw-type internally
 - [x] Implement user input to add a wave
 - [x] Make it so that each wave name must be unique
+- [x] Add "period" to user wave input fields
 
+- [] Orient the waves in a vertical list
+- [] Implement vertical markers
+- [] Implement zoom in by clicking and dragging over a horizontal section of the waves
+- [] Implement zoom out 2x by clicking and dragging a direction (like in VCS)
+- [] Allow user to click and drag to rearrange waves
 - [] Continue the wave to the end of the screen at the end of the sequence
-- [] Add "period" to user wave input fields
 - [] Allow user to edit a wave form after creation
 - [] Make incorrect wave parameter alert in WaveInput a CSS animation card shake with a red X somewhere and a message appearing that indicates the incorrect wave parameters
 - [] Allow wave to be dependent on another
 - [] Make WaveInput a drawer on the left side of the screen
+  - Consider making it a button at the bottom of the waveform list??? eh, maybe not. But think on it
 - [] Allow user to change value on wave by clicking on the value to change
 - [] Refactor drawing to make each wave it's own canvas
   - [] Pass each wave a zoom level determined in the parent component to determine width on screen. (Based on the wave period and the zoom value). Each wave will get the same zoom level
