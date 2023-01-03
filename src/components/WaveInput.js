@@ -50,6 +50,7 @@ const WaveInput = (props) => {
     name: "",
     sequence: "",
     type: "clock",
+    period: 1,
   });
 
   const handleNameChange = (e) => {
