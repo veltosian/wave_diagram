@@ -9,8 +9,11 @@ const WaveCanvas = (props) => {
     waveDrawing.draw(props.wave);
   }, [props.wave, props.config]);
 
-  return <canvas ref={canvasRef}>WaveCanvas</canvas>;
-  // return <div>HELLO</div>;
+  return (
+    <canvas className={props.className} ref={canvasRef}>
+      WaveCanvas
+    </canvas>
+  );
 };
 
 export default WaveCanvas;

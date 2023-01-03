@@ -12,6 +12,8 @@ export class WaveDrawing {
     }
   ) {
     this.canvas = canvas;
+    this.canvas.height = config.waveHeight;
+    this.canvas.width = 600;
     this.ctx = canvas.getContext("2d");
     this.config = config;
   }
@@ -80,7 +82,7 @@ export class WaveDrawing {
 
   drawValueText(wave, index) {
     const textX = this.getSequenceXOffset(index, wave.width) + 0.5 * wave.width;
-    const textY = this.getYOffset() - 0.5 * this.config.waveHeight; // zy TODO FIXME Make this cleaner
+    const textY = this.getYOffset() - 0.5 * this.canvas.height; // zy TODO FIXME Make this cleaner
     this.ctx.font = "12px arial";
     this.ctx.textBaseline = "middle";
     this.ctx.textAlign = "center";
@@ -135,7 +137,7 @@ export class WaveDrawing {
   }
 
   getYOffset() {
-    return this.config.waveHeight;
+    return this.canvas.height;
   }
 
   getTransitionWidth(width) {
@@ -155,7 +157,7 @@ export class WaveDrawing {
     const startingTransitionOffset = index === 0 ? 0 : transitionWidth / 2;
     const endingTransitionOffset = transitionWidth / 2;
 
-    const height = value === "1" ? -this.config.waveHeight : 0;
+    const height = value === "1" ? -this.canvas.height : 0;
 
     this.drawNewLine(
       xOffset + startingTransitionOffset,
@@ -197,9 +199,9 @@ export class WaveDrawing {
   drawSingleBitHighTransition(xOffset, yOffset, transitionWidth) {
     this.drawNewLine(
       xOffset - transitionWidth / 2,
-      yOffset - this.config.waveHeight,
+      yOffset - this.canvas.height,
       xOffset + transitionWidth / 2,
-      yOffset - this.config.waveHeight
+      yOffset - this.canvas.height
     );
   }
 
@@ -217,14 +219,14 @@ export class WaveDrawing {
       xOffset - transitionWidth / 2,
       yOffset,
       xOffset + transitionWidth / 2,
-      yOffset - this.config.waveHeight
+      yOffset - this.canvas.height
     );
   }
 
   drawFallingTransition(xOffset, yOffset, transitionWidth) {
     this.drawNewLine(
       xOffset - transitionWidth / 2,
-      yOffset - this.config.waveHeight,
+      yOffset - this.canvas.height,
       xOffset + transitionWidth / 2,
       yOffset
     );

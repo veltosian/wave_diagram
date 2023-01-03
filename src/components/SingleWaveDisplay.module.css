@@ -1,0 +1,12 @@
+.wave-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0.5em 0;
+}
+
+.name {
+  margin-right: 1em;
+  font-weight: bold;
+  font-size: larger;
+}
