@@ -3,7 +3,7 @@ import WaveInput from "./components/WaveInput";
 import Card from "./components/UI/Card";
 import Button from "./components/UI/Button";
 import { useEffect, useState } from "react";
-import WaveCanvas from "./components/WaveCanvas";
+import WaveDisplayArea from "./components/WaveDisplayArea";
 
 function App() {
   const [addingNewWave, setAddingNewWave] = useState(false);
@@ -67,13 +67,7 @@ function App() {
           <Button onClick={handleAddNewWaveClick}>Add New Wave</Button>
         )}
       </Card>
-      <Card>
-        {waves.map((wave) => {
-          return (
-            <WaveCanvas key={wave.name} wave={wave} config={waveCanvasConfig} />
-          );
-        })}
-      </Card>
+      <WaveDisplayArea waves={waves} config={waveCanvasConfig} />
     </div>
   );
 }
