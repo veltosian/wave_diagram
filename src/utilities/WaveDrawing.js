@@ -13,8 +13,6 @@ export class WaveDrawing {
   ) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
-    this.nameWidth = 100;
-    this.nameOffset = this.nameWidth + 20;
     this.config = config;
   }
 
@@ -133,7 +131,7 @@ export class WaveDrawing {
   }
 
   getSequenceXOffset(index, width) {
-    return index * width + this.nameOffset;
+    return index * width;
   }
 
   getYOffset() {
