@@ -20,3 +20,5 @@
 - [] Refactor drawing to make each wave it's own canvas
   - [] Pass each wave a zoom level determined in the parent component to determine width on screen. (Based on the wave period and the zoom value). Each wave will get the same zoom level
 - [] Dynamically determine wave height in the canvases
+- [] When zooming way out, the waves start to look like just a single line (which is fine) but the number values for multi-bit signals are still there overlapped with the line and each other. Do not show multi-bit values when width is below some threshold
+- [] Only show one value on multi-bit signals when the value is unchanged for 2 or more cycles
