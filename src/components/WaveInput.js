@@ -98,7 +98,7 @@ const WaveInput = (props) => {
   };
 
   const checkValidSequenceFormat = (sequence) => {
-    const validFormat = /^\s*\d+(\s*,\s*\d)*\s*$/;
+    const validFormat = /^\s*\d+(\s*,\s*\d+)*\s*$/;
     return validFormat.test(sequence);
   };
 
