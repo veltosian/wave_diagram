@@ -2,13 +2,15 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 0.5em 0;
+  margin: 0.8em 0;
 }
 
 .name {
   margin-right: 1em;
   font-weight: bold;
   font-size: larger;
+  width: 7em;
+  text-align: right;
 }
 
 .selected {
