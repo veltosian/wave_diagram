@@ -10,3 +10,7 @@
   font-weight: bold;
   font-size: larger;
 }
+
+.selected {
+  background-color: rgba(0, 255, 0, 0.2);
+}

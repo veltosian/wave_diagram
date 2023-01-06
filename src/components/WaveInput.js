@@ -108,7 +108,6 @@ const WaveInput = (props) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log(`Wave form submitted`);
     const { result: isValid, msg: msg } = isValidateWaveState();
     if (isValid) {
       props.onAddWave(waveState);

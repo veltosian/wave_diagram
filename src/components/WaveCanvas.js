@@ -1,16 +1,51 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { WaveDrawing } from "../utilities/WaveDrawing";
+import WaveDrawTypes from "../types/WaveDrawTypes";
 
 const WaveCanvas = (props) => {
   const canvasRef = useRef(null);
+  const [waveDrawing, setWaveDrawing] = useState(null);
+
   useEffect(() => {
     const canvas = canvasRef.current;
-    const waveDrawing = new WaveDrawing(canvas, props.config);
-    waveDrawing.draw(props.wave);
-  }, [props.wave, props.config]);
+    setWaveDrawing(new WaveDrawing(canvas, props.config));
+  }, [props.config]);
+
+  useEffect(() => {
+    if (waveDrawing) {
+      waveDrawing.draw(props.wave);
+    }
+  }, [waveDrawing, props.wave]);
+
+  const canvasOnClickHandler = (e) => {
+    const boundingRect = canvasRef.current.getBoundingClientRect();
+    const canvasX = e.clientX - boundingRect.left;
+
+    const sequenceIndex = waveDrawing.getSequenceIndex(canvasX);
+
+    if (props.selected) {
+      waveDrawing.drawingObject.type === WaveDrawTypes.SingleBit &&
+        props.onClick({
+          type: "toggleWaveValue",
+          sequenceIndex: sequenceIndex,
+        });
+
+      waveDrawing.drawingObject.type === WaveDrawTypes.MultiBit &&
+        props.onClick({
+          type: "changeMultiBitValue",
+          sequenceIndex: sequenceIndex,
+        });
+    } else {
+      props.onClick({ type: "selectWave" });
+    }
+  };
 
   return (
-    <canvas className={props.className} ref={canvasRef}>
+    <canvas
+      className={props.className}
+      ref={canvasRef}
+      onClick={canvasOnClickHandler}
+    >
       WaveCanvas
     </canvas>
   );

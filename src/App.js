@@ -7,16 +7,17 @@ import WaveDisplayArea from "./components/WaveDisplayArea";
 
 function App() {
   const [addingNewWave, setAddingNewWave] = useState(false);
+  const [selectedWaveName, setSelectedWaveName] = useState(null);
   const [waves, setWaves] = useState([
     {
       name: "wave1",
-      period: 1e-9,
+      period: 1,
       type: "clock",
-      sequence: [1, 2, 2, 4],
+      sequence: [1, 2, 2, 4, 5, 6, 7, 8, 9, 10],
     },
   ]); // zy DEBUG Data. REMOVE
   const [waveCanvasConfig, setWaveCanvasConfig] = useState({
-    zoom: 25e-9,
+    zoom: 10,
     waveHeight: 70,
   });
 
@@ -50,7 +51,63 @@ function App() {
         zoom: zoom,
       };
     });
-  }, [waves[0]]);
+  }, [waves]);
+
+  const onWaveClickHandler = (name, action) => {
+    const wave = waves.find((wave) => wave.name === name);
+
+    if (!wave) {
+      console.error(`Error: Could not find wave with name ${name}`);
+      return;
+    }
+
+    switch (action.type) {
+      case "selectWave":
+        setSelectedWaveName(wave.name);
+        break;
+      case "toggleWaveValue":
+        handleToggleWaveValue(wave, action.sequenceIndex);
+        break;
+      case "changeMultiBitValue":
+        break;
+      default:
+        console.error(`Error: Unsupported action type "${action.type}"`);
+    }
+  };
+
+  const handleToggleWaveValue = (wave, sequenceIndex) => {
+    setWaves((prevWaves) => {
+      return prevWaves.map((prevWave) => {
+        if (prevWave.name === wave.name) {
+          const newWave = { ...prevWave, sequence: [...prevWave.sequence] };
+          newWave.sequence[sequenceIndex] = toggleSingleBit(
+            newWave.sequence[sequenceIndex]
+          );
+          return newWave;
+        } else {
+          return prevWave;
+        }
+      });
+    });
+  };
+
+  const toggleSingleBit = (val) => {
+    switch (val) {
+      case "0":
+        return "1";
+      case "1":
+        return "0";
+      default:
+        console.error(
+          `Tried to toggle single bit value but value was neither "0" or "1". Instead it was ${val}`
+        );
+        return "N/A";
+    }
+  };
+
+  const handleWaveDeselect = () => {
+    setSelectedWaveName(null);
+  };
 
   return (
     <div>
@@ -67,7 +124,13 @@ function App() {
           <Button onClick={handleAddNewWaveClick}>Add New Wave</Button>
         )}
       </Card>
-      <WaveDisplayArea waves={waves} config={waveCanvasConfig} />
+      <WaveDisplayArea
+        waves={waves}
+        selectedWave={selectedWaveName}
+        config={waveCanvasConfig}
+        onWaveClick={onWaveClickHandler}
+        onWaveDeselect={handleWaveDeselect}
+      />
     </div>
   );
 }

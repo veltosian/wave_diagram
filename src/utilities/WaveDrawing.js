@@ -16,28 +16,28 @@ export class WaveDrawing {
     this.canvas.width = 600;
     this.ctx = canvas.getContext("2d");
     this.config = config;
+    this.drawingObject = null;
   }
 
   draw(wave) {
     this.clearCanvas();
-    const waveDrawingObject = this.getDrawingObject(wave);
-    this.drawWave(waveDrawingObject);
+    this.setDrawingObject(wave);
+    this.drawWave();
   }
 
-  getDrawingObject(wave) {
+  setDrawingObject(wave) {
     if (!wave) {
       return null;
     }
 
-    const drawingObject = new WaveDrawData(wave);
+    this.drawingObject = new WaveDrawData(wave);
 
     const widthFactor = this.config.zoom / wave.period;
-    drawingObject.setWidth(this.canvas.width / widthFactor);
-
-    return drawingObject;
+    this.drawingObject.setWidth(this.canvas.width / widthFactor);
   }
 
-  drawWave(wave) {
+  drawWave() {
+    const wave = this.drawingObject;
     switch (wave.type) {
       case WaveDrawTypes.SingleBit:
         this.drawSingleBitWave(wave);
@@ -244,5 +244,10 @@ export class WaveDrawing {
 
   clearCanvas() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  getSequenceIndex(xOffset) {
+    const width = this.drawingObject.width;
+    return Math.floor(xOffset / width);
   }
 }
