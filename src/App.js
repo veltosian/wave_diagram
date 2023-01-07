@@ -43,6 +43,9 @@ function App() {
   };
 
   useEffect(() => {
+    if (waves.length === 0) {
+      return undefined;
+    }
     // Find zoom level for first wave
     const zoom = waves[0].period * 20;
     setWaveCanvasConfig((prevState) => {
@@ -73,6 +76,12 @@ function App() {
       default:
         console.error(`Error: Unsupported action type "${action.type}"`);
     }
+  };
+
+  const onWaveDeleteHandler = (name) => {
+    setWaves((prevWaves) => {
+      return prevWaves.filter((wave) => wave.name != name);
+    });
   };
 
   const handleToggleWaveValue = (wave, sequenceIndex) => {
@@ -124,13 +133,16 @@ function App() {
           <Button onClick={handleAddNewWaveClick}>Add New Wave</Button>
         )}
       </Card>
-      <WaveDisplayArea
-        waves={waves}
-        selectedWave={selectedWaveName}
-        config={waveCanvasConfig}
-        onWaveClick={onWaveClickHandler}
-        onWaveDeselect={handleWaveDeselect}
-      />
+      {waves.length > 0 && (
+        <WaveDisplayArea
+          waves={waves}
+          selectedWave={selectedWaveName}
+          config={waveCanvasConfig}
+          onWaveClick={onWaveClickHandler}
+          onWaveDelete={onWaveDeleteHandler}
+          onWaveDeselect={handleWaveDeselect}
+        />
+      )}
     </div>
   );
 }

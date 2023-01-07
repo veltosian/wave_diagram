@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
 const Icon = (props) => {
   return (
     <span
-      className="material-symbols-outlined"
+      className={`material-symbols-outlined ${props.className}`}
       onClick={props.onClick}
-      style={{ cursor: 'pointer' }}
+      style={{ cursor: "pointer" }}
     >
       {props.variant}
     </span>

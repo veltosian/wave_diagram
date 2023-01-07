@@ -15,6 +15,13 @@ const WaveDisplayArea = (props) => {
     };
   });
 
+  const waveOnDeleteHandlers = waves.map((wave) => {
+    return () => {
+      console.log(`Deleting wave ${wave.name}`);
+      props.onWaveDelete(wave.name);
+    };
+  });
+
   return (
     <Card onClickOutside={handleWaveDeselect}>
       {waves.map((wave, index) => {
@@ -24,7 +31,8 @@ const WaveDisplayArea = (props) => {
             key={wave.name}
             wave={wave}
             config={config}
-            onClick={waveOnClickHandlers[index]}
+            onWaveClick={waveOnClickHandlers[index]}
+            onWaveDelete={waveOnDeleteHandlers[index]}
           />
         );
       })}
