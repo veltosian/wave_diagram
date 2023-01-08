@@ -7,6 +7,11 @@ import Drawer from "./UI/Drawer";
 const SingleWaveDisplay = (props) => {
   const { wave, config, selected } = props;
   const selectedStyle = selected ? styles.selected : "";
+
+  const handleWaveDelete = () => {
+    props.onWaveDelete(wave.name);
+  };
+
   return (
     <React.Fragment>
       <div className={`${styles["wave-container"]} ${selectedStyle}`}>
@@ -23,7 +28,7 @@ const SingleWaveDisplay = (props) => {
           <Icon
             className={styles.icon}
             variant="delete"
-            onClick={props.onWaveDelete}
+            onClick={handleWaveDelete}
           />
         </Drawer>
       )}

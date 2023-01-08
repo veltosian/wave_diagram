@@ -25,18 +25,18 @@ const WaveCanvas = (props) => {
 
     if (props.selected) {
       waveDrawing.drawingObject.type === WaveDrawTypes.SingleBit &&
-        props.onClick({
+        props.onClick(props.wave.name, {
           type: "toggleWaveValue",
           sequenceIndex: sequenceIndex,
         });
 
       waveDrawing.drawingObject.type === WaveDrawTypes.MultiBit &&
-        props.onClick({
+        props.onClick(props.wave.name, {
           type: "changeMultiBitValue",
           sequenceIndex: sequenceIndex,
         });
     } else {
-      props.onClick({ type: "selectWave" });
+      props.onClick(props.wave.name, { type: "selectWave" });
     }
   };
 
