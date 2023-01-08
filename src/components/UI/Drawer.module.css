@@ -1,0 +1,18 @@
+@keyframes slide-down {
+  from {
+    height: 0;
+    padding: 0;
+  }
+  to {
+    padding: 0.2em 0;
+    height: 1.5em;
+  }
+}
+
+.drawer {
+  padding: 0.2em 0;
+  overflow: hidden;
+  animation-name: slide-down;
+  animation-duration: 0.4s;
+  height: 1.5em;
+}
