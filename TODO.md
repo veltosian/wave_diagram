@@ -2,8 +2,8 @@
 
 ## Features
 
+- [] Add wave edit button and functionality
 - [] Allow user to change value on wave by clicking on the value to change
-- [] Create wave-actions drawer (edit, delete, etc)
 - [] Add wave type: manual value input (This is current behaviour shown in the app)
 - [] Implement functionality for different types of waves: clock, sequential, combinational, manual value input
 - [] Implement vertical markers
@@ -21,6 +21,7 @@
 
 ## Bugs
 
+- [] Select wave when SingleWaveDisplay is clicked, not just the WaveCanvas
 - [] When zooming way out, the waves start to look like just a single line (which is fine) but the number values for multi-bit signals are still there overlapped with the line and each other. Do not show multi-bit values when width is below some threshold
 - [] Make long names look less bad
 
@@ -34,3 +35,4 @@
 - [x] Add "period" to user wave input fields
 - [x] Orient the waves in a vertical list
 - [x] Refactor drawing to make each wave it's own canvas
+- [x] Create wave-actions drawer (edit, delete, etc)
