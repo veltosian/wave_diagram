@@ -32,7 +32,7 @@ const WaveCanvas = (props) => {
 
       waveDrawing.drawingObject.type === WaveDrawTypes.MultiBit &&
         props.onClick(props.wave.name, {
-          type: "changeMultiBitValue",
+          type: "changeMultibitValue",
           sequenceIndex: sequenceIndex,
         });
     } else {

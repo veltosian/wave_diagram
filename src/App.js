@@ -71,7 +71,7 @@ function App() {
       case "toggleWaveValue":
         handleToggleWaveValue(wave, action.sequenceIndex);
         break;
-      case "changeMultiBitValue":
+      case "changeMultibitValue":
         break;
       default:
         console.error(`Error: Unsupported action type "${action.type}"`);
