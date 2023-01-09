@@ -2,8 +2,9 @@
 
 ## Features
 
-- [] Add wave edit button and functionality
 - [] Allow user to change value on wave by clicking on the value to change
+- [] Add wave edit button and functionality
+- [] Allow user to edit a wave form after creation
 - [] Add wave type: manual value input (This is current behaviour shown in the app)
 - [] Implement functionality for different types of waves: clock, sequential, combinational, manual value input
 - [] Implement vertical markers
@@ -11,19 +12,25 @@
 - [] Implement zoom out 2x by clicking and dragging a direction (like in VCS)
 - [] Allow user to ctl+click and drag to rearrange waves
 - [] Continue the wave to the end of the screen at the end of the sequence
-- [] Allow user to edit a wave form after creation
 - [] Make incorrect wave parameter alert in WaveInput a CSS animation card shake with a red X somewhere and a message appearing that indicates the incorrect wave parameters
 - [] Allow wave to be dependent on another
 - [] Make WaveInput a drawer on the left side of the screen
   - Consider making it a button at the bottom of the waveform list??? eh, maybe not. But think on it
 - [] Dynamically determine wave height in the canvases
 - [] Only show one value on multi-bit signals when the value is unchanged for 2 or more cycles
+- [] Select portion of a wave and drag it to the left or the right. Overwriting one side and extending the other
 
 ## Bugs
 
+- [] Fix the N/A and undefined that happens if I click on the canvas but to the right of the wave where there is no value
 - [] Select wave when SingleWaveDisplay is clicked, not just the WaveCanvas
 - [] When zooming way out, the waves start to look like just a single line (which is fine) but the number values for multi-bit signals are still there overlapped with the line and each other. Do not show multi-bit values when width is below some threshold
 - [] Make long names look less bad
+
+## Cleanup
+
+- [] Refactor App.js. Take out a lot of the logic into custom hooks and/or take that logic into a sub-component
+- [] Put waves into context
 
 ## Done
 
