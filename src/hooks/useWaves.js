@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const useWaves = () => {
   const [waves, setWaves] = useState([
+    {
+      name: "wave2",
+      period: 1,
+      type: "clock",
+      sequence: ["0", "0", "0", "0", "0", "0", "0", "0", "1", "0"],
+    },
     {
       name: "wave1",
       period: 1,
@@ -30,40 +36,20 @@ const useWaves = () => {
     });
   }, [waves]);
 
-  const onWaveClickHandler = (name, action) => {
-    const wave = waves.find((wave) => wave.name === name);
-
-    if (!wave) {
-      console.error(`Error: Could not find wave with name ${name}`);
-      return;
-    }
-
-    switch (action.type) {
-      case "selectWave":
-        setSelectedWaveName(wave.name);
-        break;
-      case "toggleWaveValue":
-        handleToggleWaveValue(wave, action.sequenceIndex);
-        break;
-      case "changeMultibitValue":
-        break;
-      default:
-        console.error(`Error: Unsupported action type "${action.type}"`);
-    }
+  const waveSelectHandler = (name) => {
+    setSelectedWaveName(name);
   };
 
   const handleWaveDeselect = () => {
     setSelectedWaveName(null);
   };
 
-  const handleToggleWaveValue = (wave, sequenceIndex) => {
+  const updateWaveValue = (wave, sequenceIndex, newValue) => {
     setWaves((prevWaves) => {
       return prevWaves.map((prevWave) => {
         if (prevWave.name === wave.name) {
           const newWave = { ...prevWave, sequence: [...prevWave.sequence] };
-          newWave.sequence[sequenceIndex] = toggleSingleBit(
-            newWave.sequence[sequenceIndex]
-          );
+          newWave.sequence[sequenceIndex] = newValue;
           return newWave;
         } else {
           return prevWave;
@@ -71,6 +57,13 @@ const useWaves = () => {
       });
     });
   };
+
+  const handleSinglebitToggle = (name, sequenceIndex) => {
+    const wave = getWaveFromName(name);
+    const newValue = toggleSingleBit(wave.sequence[sequenceIndex]);
+    updateWaveValue(wave, sequenceIndex, newValue);
+  };
+
   const toggleSingleBit = (val) => {
     switch (val) {
       case "0":
@@ -83,6 +76,11 @@ const useWaves = () => {
         );
         return "N/A";
     }
+  };
+
+  const handleMultibitValueUpdate = (waveName, sequenceIndex, newValue) => {
+    const wave = getWaveFromName(waveName);
+    updateWaveValue(wave, sequenceIndex, newValue);
   };
 
   const handleAddWave = (waveData) => {
@@ -100,8 +98,19 @@ const useWaves = () => {
 
   const onWaveDeleteHandler = (name) => {
     setWaves((prevWaves) => {
-      return prevWaves.filter((wave) => wave.name != name);
+      return prevWaves.filter((wave) => wave.name !== name);
     });
+  };
+
+  const getWaveFromName = (name) => {
+    const wave = waves.find((wave) => wave.name === name);
+
+    if (!wave) {
+      console.error(`Error: Could not find wave with name ${name}`);
+      return;
+    }
+
+    return wave;
   };
 
   return {
@@ -110,10 +119,12 @@ const useWaves = () => {
     waveCanvasConfig,
     setWaveCanvasConfig,
     selectedWaveName,
-    onWaveClickHandler,
     handleWaveDeselect,
     handleAddWave,
     onWaveDeleteHandler,
+    waveSelectHandler,
+    handleSinglebitToggle,
+    handleMultibitValueUpdate,
   };
 };
 

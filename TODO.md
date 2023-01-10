@@ -2,7 +2,7 @@
 
 ## Features
 
-- [] Allow user to change value on wave by clicking on the value to change
+- [] Update multibitEdit component to show a clickable button that lets you submit the change instead of solely relying on the enter key
 - [] Add wave edit button and functionality
 - [] Allow user to edit a wave form after creation
 - [] Add wave type: manual value input (This is current behaviour shown in the app)
@@ -22,6 +22,7 @@
 
 ## Bugs
 
+- [] Fix placement of the multibitEdit component when clikcing on a multibitWave
 - [] Fix the N/A and undefined that happens if I click on the canvas but to the right of the wave where there is no value
 - [] Select wave when SingleWaveDisplay is clicked, not just the WaveCanvas
 - [] When zooming way out, the waves start to look like just a single line (which is fine) but the number values for multi-bit signals are still there overlapped with the line and each other. Do not show multi-bit values when width is below some threshold
@@ -43,3 +44,4 @@
 - [x] Orient the waves in a vertical list
 - [x] Refactor drawing to make each wave it's own canvas
 - [x] Create wave-actions drawer (edit, delete, etc)
+- [x] Allow user to change value on wave by clicking on the value to change

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import SingleWaveDisplay from "./SingleWaveDisplay";
 import Card from "./UI/Card";
 
@@ -18,7 +18,9 @@ const WaveDisplayArea = (props) => {
             key={wave.name}
             wave={wave}
             config={config}
-            onWaveClick={props.onWaveClick}
+            onSelect={props.onSelect}
+            onToggleWaveValue={props.onToggleWaveValue}
+            onMultibitValueUpdate={props.onMultibitValueUpdate}
             onWaveDelete={props.onWaveDelete}
           />
         );

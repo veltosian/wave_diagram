@@ -2,7 +2,7 @@ import "./App.css";
 import WaveInput from "./components/WaveInput";
 import Card from "./components/UI/Card";
 import Button from "./components/UI/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import WaveDisplayArea from "./components/WaveDisplayArea";
 import useWaves from "./hooks/useWaves";
 
@@ -11,12 +11,13 @@ function App() {
   const {
     waves,
     selectedWaveName,
-    onWaveClickHandler,
+    handleSinglebitToggle,
+    handleMultibitValueUpdate,
     handleWaveDeselect,
     waveCanvasConfig,
-    setWaveCanvasConfig,
     handleAddWave,
     onWaveDeleteHandler,
+    waveSelectHandler,
   } = useWaves();
 
   const handleAddNewWaveClick = () => {
@@ -47,7 +48,9 @@ function App() {
           waves={waves}
           selectedWave={selectedWaveName}
           config={waveCanvasConfig}
-          onWaveClick={onWaveClickHandler}
+          onSelect={waveSelectHandler}
+          onToggleWaveValue={handleSinglebitToggle}
+          onMultibitValueUpdate={handleMultibitValueUpdate}
           onWaveDelete={onWaveDeleteHandler}
           onWaveDeselect={handleWaveDeselect}
         />

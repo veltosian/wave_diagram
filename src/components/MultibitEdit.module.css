@@ -1,0 +1,7 @@
+.multibit-edit {
+  background-color: white;
+  border: 1px solid black;
+  position: absolute;
+  left: var(--position-x);
+  top: var(--position-y);
+}

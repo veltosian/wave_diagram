@@ -108,12 +108,12 @@ const WaveInput = (props) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const { result: isValid, msg: msg } = isValidateWaveState();
+    const { result: isValid, msg } = isValidateWaveState();
     if (isValid) {
       props.onAddWave(waveState);
       waveStateDispatch({ type: "clear" });
     } else {
-      alert(`Invalid wave parameters: ${msg}`); // zy TODO Make this a CSS animation card shake with a red X somewhere and a message appear indicating the incorrect wave parameters
+      alert(`Invalid wave parameters: ${msg}`);
     }
   };
 
