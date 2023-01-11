@@ -2,7 +2,6 @@
 
 ## Features
 
-- [] Update multibitEdit component to show a clickable button that lets you submit the change instead of solely relying on the enter key
 - [] Add wave edit button and functionality
 - [] Allow user to edit a wave form after creation
 - [] Add wave type: manual value input (This is current behaviour shown in the app)
@@ -45,3 +44,4 @@
 - [x] Refactor drawing to make each wave it's own canvas
 - [x] Create wave-actions drawer (edit, delete, etc)
 - [x] Allow user to change value on wave by clicking on the value to change
+- [x] Update multibitEdit component to show a clickable button that lets you submit the change instead of solely relying on the enter key

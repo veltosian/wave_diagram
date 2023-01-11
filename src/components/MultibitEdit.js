@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import useClickOutside from "../hooks/useClickOutside";
 import styles from "./MultibitEdit.module.css";
+import Button from "./UI/Button";
+import Icon from "./UI/Icon";
 
 const MultibitEdit = (props) => {
   const multibitEditRef = useRef(null);
@@ -17,7 +19,8 @@ const MultibitEdit = (props) => {
       props.coordinates.y + "px"
     );
 
-    multibitEditRef.current.children.namedItem("valueInput").select();
+    const formRef = multibitEditRef.current.children.namedItem("editForm");
+    formRef.children.namedItem("valueInput").select();
   }, [props.coordinates.x, props.coordinates.y]);
 
   const handleMultibitValueChange = (e) => {
@@ -25,23 +28,37 @@ const MultibitEdit = (props) => {
   };
 
   const handleKeyDown = (e) => {
-    const sequenceIndex = props.sequenceIndex;
     if (e.key === "Enter") {
-      props.onUpdate(props.waveName, sequenceIndex, e.target.value);
-      props.onClose();
+      handleValueUpdate();
     }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleValueUpdate();
+  };
+
+  const handleValueUpdate = () => {
+    const sequenceIndex = props.sequenceIndex;
+    props.onUpdate(props.waveName, sequenceIndex, multibitValue);
+    props.onClose();
   };
 
   return (
     <div className={styles["multibit-edit"]} ref={multibitEditRef}>
-      <input
-        id="valueInput"
-        autoFocus
-        type="text"
-        value={multibitValue}
-        onChange={handleMultibitValueChange}
-        onKeyDown={handleKeyDown}
-      ></input>
+      <form id="editForm" onSubmit={handleFormSubmit}>
+        <input
+          id="valueInput"
+          autoFocus
+          type="text"
+          value={multibitValue}
+          onChange={handleMultibitValueChange}
+          onKeyDown={handleKeyDown}
+        ></input>
+        <Button type="submit">
+          <Icon variant="add" />
+        </Button>
+      </form>
     </div>
   );
 };
