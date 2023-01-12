@@ -2,56 +2,23 @@ import React, { useReducer, useState, useEffect } from "react";
 import Icon from "./UI/Icon";
 import styles from "./WaveInput.module.css";
 import FieldAlert from "./UI/FieldAlert";
+import useWaveInput from "../hooks/useWaveInput";
 
-function waveStateReducer(state, action) {
-  switch (action.type) {
-    case "updateName":
-      return {
-        ...state,
-        name: action.value.trim(),
-      };
-    case "updateSequence":
-      return {
-        ...state,
-        sequence: action.value,
-      };
-    case "updateType":
-      return {
-        ...state,
-        type: action.value,
-      };
-    case "updatePeriod":
-      return {
-        ...state,
-        period: action.value,
-      };
-    case "clear":
-      return {
-        name: "",
-        sequence: "",
-        type: state.type,
-        period: state.period,
-      };
-    default:
-      console.error(`Invalid reducer action type`);
-  }
-}
+const checkValidName = (name) => {
+  return /^\w+$/.test(name);
+};
 
 const WaveInput = (props) => {
-  const debounceTime = 400;
+  const {
+    waveState,
+    waveStateDispatch,
+    validSequenceFormat,
+    isUniqueName,
+    setIsUniqueName,
+    checkValidSequenceFormat,
+  } = useWaveInput();
 
   const validWaveTypes = ["clock", "sequential", "combinational"];
-
-  const [validSequenceFormat, setValidSequenceFormat] = useState(true);
-
-  const [isUniqueName, setIsUniqueName] = useState(true);
-
-  const [waveState, waveStateDispatch] = useReducer(waveStateReducer, {
-    name: "",
-    sequence: "",
-    type: "clock",
-    period: 1,
-  });
 
   const handleNameChange = (e) => {
     const isUnique = checkNameUnique(e.target.value);
@@ -62,23 +29,6 @@ const WaveInput = (props) => {
   const handleSequenceChange = (e) => {
     waveStateDispatch({ type: "updateSequence", value: e.target.value });
   };
-
-  useEffect(() => {
-    const checkWaveSequence = setTimeout(() => {
-      if (
-        !checkValidSequenceFormat(waveState.sequence) &&
-        waveState.sequence.trim().length !== 0
-      ) {
-        setValidSequenceFormat(false);
-      } else {
-        setValidSequenceFormat(true);
-      }
-    }, debounceTime);
-
-    return () => {
-      clearTimeout(checkWaveSequence);
-    };
-  }, [waveState.sequence]);
 
   const handleTypeChange = (e) => {
     waveStateDispatch({ type: "updateType", value: e.target.value });
@@ -91,15 +41,6 @@ const WaveInput = (props) => {
   const checkNameUnique = (name) => {
     const existingNames = props.waves.map((wave) => wave.name);
     return !existingNames.includes(name);
-  };
-
-  const checkValidName = (name) => {
-    return /^\w+$/.test(name);
-  };
-
-  const checkValidSequenceFormat = (sequence) => {
-    const validFormat = /^\s*\d+(\s*,\s*\d+)*\s*$/;
-    return validFormat.test(sequence);
   };
 
   const checkValidType = (type) => {
