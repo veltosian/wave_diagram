@@ -1,16 +1,24 @@
-import React from "react";
-import SingleWaveDisplay from "./SingleWaveDisplay";
+import React, { useState } from "react";
 import Card from "./UI/Card";
+import SingleWaveDisplay from "./SingleWaveDisplay";
+import WaveEditDrawer from "./WaveEditDrawer";
 
 const WaveDisplayArea = (props) => {
   const { waves, config, selectedWave } = props;
+
+  const [editDrawerWave, setEditDrawerWave] = useState(null);
 
   const handleWaveDeselect = () => {
     props.onWaveDeselect();
   };
 
+  const handleEditDrawerOpen = (wave) => {
+    setEditDrawerWave(wave);
+  };
+
   return (
     <Card onClickOutside={handleWaveDeselect}>
+      {selectedWave && <WaveEditDrawer />}
       {waves.map((wave, index) => {
         return (
           <SingleWaveDisplay
