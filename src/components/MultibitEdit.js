@@ -56,7 +56,7 @@ const MultibitEdit = (props) => {
           onKeyDown={handleKeyDown}
         ></input>
         <Button type="submit">
-          <Icon variant="add" />
+          <Icon variant="done" />
         </Button>
       </form>
     </div>
