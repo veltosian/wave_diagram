@@ -16,6 +16,13 @@ const checkValidSequenceFormat = (sequence) => {
 };
 
 const WaveInput = (props) => {
+  const {
+    name: initialName,
+    type: initialType,
+    period: initialPeriod,
+    sequence: initialSequence,
+  } = props.initialWave;
+
   const [waveName, setWaveName] = useState("");
   const [waveType, setWaveType] = useState("clock");
   const [waveSequence, setWaveSequence] = useState("");
@@ -27,6 +34,7 @@ const WaveInput = (props) => {
     waveStateDispatch,
     isUniqueName,
     setIsUniqueName,
+    getWaveTypeLabel,
     getNewWave,
   } = useWaveInput();
 
@@ -53,6 +61,13 @@ const WaveInput = (props) => {
       clearTimeout(checkWaveSequence);
     };
   }, [waveSequence, waveStateDispatch]);
+
+  useEffect(() => {
+    setWaveName(initialName);
+    setWaveType(getWaveTypeLabel(initialType));
+    setWavePeriod(initialPeriod);
+    setWaveSequence(initialSequence.join(", "));
+  }, [initialName, initialType, initialPeriod, initialSequence]);
 
   const validWaveTypes = ["clock", "sequential", "combinational"];
 

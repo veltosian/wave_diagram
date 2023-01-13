@@ -5,6 +5,7 @@ import Button from "./components/UI/Button";
 import { useState } from "react";
 import WaveDisplayArea from "./components/WaveDisplayArea";
 import useWaves from "./hooks/useWaves";
+import { Wave } from "./utilities/Wave";
 
 function App() {
   const [addingNewWave, setAddingNewWave] = useState(false);
@@ -37,6 +38,7 @@ function App() {
               onClose={handleCloseNewWaveClick}
               onAddWave={handleAddWave}
               waves={waves}
+              initialWave={new Wave()} // zy debug fix
             />
           </div>
         ) : (

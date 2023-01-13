@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
+import WaveLogicTypes from "../types/WaveLogicTypes";
 
 const useWaves = () => {
   const [waves, setWaves] = useState([
     {
       name: "wave2",
       period: 1,
-      type: "clock",
+      type: WaveLogicTypes.Clock,
       sequence: ["0", "0", "0", "0", "0", "0", "0", "0", "1", "0"],
     },
     {
       name: "wave1",
       period: 1,
-      type: "clock",
+      type: WaveLogicTypes.Clock,
       sequence: [1, 2, 2, 4, 5, 6, 7, 8, 9, 10],
     },
   ]); // zy DEBUG Data. REMOVE

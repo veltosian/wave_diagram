@@ -49,11 +49,22 @@ const useWaveInput = (wave) => {
     return waveState;
   };
 
+  const getWaveTypeLabel = (logicType) => {
+    let type = null;
+    Object.entries(waveTypeLabelToWaveLogicType).forEach((entry) => {
+      if (entry[1] === logicType) {
+        type = entry[0];
+      }
+    });
+    return type;
+  };
+
   return {
     waveState,
     waveStateDispatch,
     isUniqueName,
     setIsUniqueName,
+    getWaveTypeLabel,
     getNewWave,
   };
 };
