@@ -83,14 +83,7 @@ const useWaves = () => {
     updateWaveValue(wave, sequenceIndex, newValue);
   };
 
-  const handleAddWave = (waveData) => {
-    const name = waveData.name;
-    const type = waveData.type;
-    const trimmedSequence = waveData.sequence.replace(/\s/g, "");
-    const sequence = trimmedSequence.split(",");
-    const period = waveData.period;
-
-    const newWave = { name, type, sequence, period };
+  const handleAddWave = (newWave) => {
     setWaves((prevWaves) => {
       return [newWave, ...prevWaves];
     });

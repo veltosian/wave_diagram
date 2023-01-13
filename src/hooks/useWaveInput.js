@@ -1,84 +1,60 @@
-import React, { useState, useEffect, useReducer } from "react";
+import { useState, useReducer } from "react";
+import WaveLogicTypes from "../types/WaveLogicTypes";
+import { Wave } from "../utilities/Wave";
 
-// zy TODO Try to remove checkValidSequenceFormat from WaveInput and make it rely on isValidName state value (and make it if I don't have it already)
-
-const debounceTime = 400;
+const waveTypeLabelToWaveLogicType = {
+  clock: WaveLogicTypes.Clock,
+  sequential: WaveLogicTypes.Sequential,
+  combinational: WaveLogicTypes.Combinational,
+};
 
 function waveStateReducer(state, action) {
   switch (action.type) {
     case "updateName":
       return {
         ...state,
-        name: action.value.trim(),
+        name: action.value,
       };
     case "updateSequence":
+      const trimmedSequence = action.value.replace(/\s/g, "");
+      const sequence = trimmedSequence.split(",");
       return {
         ...state,
-        sequence: action.value,
+        sequence: sequence,
       };
     case "updateType":
       return {
         ...state,
-        type: action.value,
+        type: waveTypeLabelToWaveLogicType[action.value],
       };
     case "updatePeriod":
       return {
         ...state,
-        period: action.value,
-      };
-    case "clear":
-      return {
-        name: "",
-        sequence: "",
-        type: state.type,
-        period: state.period,
+        period: parseFloat(action.value),
       };
     default:
       console.error(`Invalid reducer action type`);
   }
 }
 
-const checkValidSequenceFormat = (sequence) => {
-  const validFormat = /^\s*\d+(\s*,\s*\d+)*\s*$/;
-  return validFormat.test(sequence);
-};
-
 const useWaveInput = (wave) => {
-  const [waveState, waveStateDispatch] = useReducer(waveStateReducer, {
-    name: "",
-    sequence: "",
-    type: "clock",
-    period: 1,
-  });
-
-  const [validSequenceFormat, setValidSequenceFormat] = useState(true);
-
-  useEffect(() => {
-    const checkWaveSequence = setTimeout(() => {
-      if (
-        !checkValidSequenceFormat(waveState.sequence) &&
-        waveState.sequence.trim().length !== 0
-      ) {
-        setValidSequenceFormat(false);
-      } else {
-        setValidSequenceFormat(true);
-      }
-    }, debounceTime);
-
-    return () => {
-      clearTimeout(checkWaveSequence);
-    };
-  }, [waveState.sequence]);
+  const [waveState, waveStateDispatch] = useReducer(
+    waveStateReducer,
+    new Wave()
+  );
 
   const [isUniqueName, setIsUniqueName] = useState(true);
+
+  const getNewWave = () => {
+    return waveState;
+  };
 
   return {
     waveState,
     waveStateDispatch,
-    validSequenceFormat,
     isUniqueName,
     setIsUniqueName,
-    checkValidSequenceFormat,
+    getNewWave,
   };
 };
 

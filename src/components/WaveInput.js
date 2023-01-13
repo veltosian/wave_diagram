@@ -1,41 +1,77 @@
-import React, { useReducer, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "./UI/Icon";
 import styles from "./WaveInput.module.css";
 import FieldAlert from "./UI/FieldAlert";
 import useWaveInput from "../hooks/useWaveInput";
 
+const debounceTime = 400;
+
 const checkValidName = (name) => {
   return /^\w+$/.test(name);
 };
 
+const checkValidSequenceFormat = (sequence) => {
+  const validFormat = /^\s*\d+(\s*,\s*\d+)*\s*$/;
+  return validFormat.test(sequence);
+};
+
 const WaveInput = (props) => {
+  const [waveName, setWaveName] = useState("");
+  const [waveType, setWaveType] = useState("clock");
+  const [waveSequence, setWaveSequence] = useState("");
+  const [wavePeriod, setWavePeriod] = useState("1");
+  const [validSequenceFormat, setValidSequenceFormat] = useState(true);
+
   const {
     waveState,
     waveStateDispatch,
-    validSequenceFormat,
     isUniqueName,
     setIsUniqueName,
-    checkValidSequenceFormat,
+    getNewWave,
   } = useWaveInput();
+
+  useEffect(() => {
+    waveStateDispatch({ type: "updateName", value: waveName });
+    waveStateDispatch({ type: "updateType", value: waveType });
+    waveStateDispatch({ type: "updatePeriod", value: wavePeriod });
+  }, [waveName, waveType, wavePeriod, waveStateDispatch]);
+
+  useEffect(() => {
+    const checkWaveSequence = setTimeout(() => {
+      if (
+        !checkValidSequenceFormat(waveSequence) &&
+        waveSequence.trim().length !== 0
+      ) {
+        setValidSequenceFormat(false);
+      } else {
+        setValidSequenceFormat(true);
+        waveStateDispatch({ type: "updateSequence", value: waveSequence });
+      }
+    }, debounceTime);
+
+    return () => {
+      clearTimeout(checkWaveSequence);
+    };
+  }, [waveSequence, waveStateDispatch]);
 
   const validWaveTypes = ["clock", "sequential", "combinational"];
 
   const handleNameChange = (e) => {
     const isUnique = checkNameUnique(e.target.value);
     setIsUniqueName(isUnique);
-    waveStateDispatch({ type: "updateName", value: e.target.value });
+    setWaveName(e.target.value.trim());
   };
 
   const handleSequenceChange = (e) => {
-    waveStateDispatch({ type: "updateSequence", value: e.target.value });
+    setWaveSequence(e.target.value);
   };
 
   const handleTypeChange = (e) => {
-    waveStateDispatch({ type: "updateType", value: e.target.value });
+    setWaveType(e.target.value);
   };
 
   const handlePeriodChange = (e) => {
-    waveStateDispatch({ type: "updatePeriod", value: e.target.value });
+    setWavePeriod(e.target.value);
   };
 
   const checkNameUnique = (name) => {
@@ -49,20 +85,22 @@ const WaveInput = (props) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const { result: isValid, msg } = isValidateWaveState();
+    const { result: isValid, msg } = isValidWaveState();
     if (isValid) {
-      props.onAddWave(waveState);
-      waveStateDispatch({ type: "clear" });
+      const newWave = getNewWave(waveName, waveType, wavePeriod, waveSequence);
+      props.onAddWave(newWave);
+      setWaveName("");
+      setWaveSequence("");
     } else {
       alert(`Invalid wave parameters: ${msg}`);
     }
   };
 
-  const isValidateWaveState = () => {
+  const isValidWaveState = () => {
     let isValid = true;
     let msg = "";
 
-    if (!checkValidSequenceFormat(waveState.sequence)) {
+    if (!checkValidSequenceFormat(waveSequence)) {
       isValid = false;
       msg += "Invalid values. ";
     }
@@ -72,7 +110,7 @@ const WaveInput = (props) => {
       msg += "Invalid name. ";
     }
 
-    if (!checkValidType(waveState.type)) {
+    if (!checkValidType(waveType)) {
       isValid = false;
       msg += "Invalid type. ";
     }
@@ -90,7 +128,7 @@ const WaveInput = (props) => {
             type="text"
             id="nameInput"
             onChange={handleNameChange}
-            value={waveState.name}
+            value={waveName}
           ></input>
           {!isUniqueName && (
             <FieldAlert variant="error"> Name is not unique</FieldAlert>
@@ -102,7 +140,7 @@ const WaveInput = (props) => {
             name="wave-type"
             id="wave-type"
             onChange={handleTypeChange}
-            value={waveState.type}
+            value={waveType}
           >
             {validWaveTypes.map((type) => {
               return (
@@ -120,7 +158,7 @@ const WaveInput = (props) => {
           <input
             type="number"
             id="wave-period"
-            value={waveState.period}
+            value={wavePeriod}
             onChange={handlePeriodChange}
           />
         </span>
@@ -129,7 +167,7 @@ const WaveInput = (props) => {
           <input
             type="text"
             id="Values"
-            value={waveState.sequence}
+            value={waveSequence}
             onChange={handleSequenceChange}
             className={!validSequenceFormat ? styles["invalid-input"] : ""}
           />
