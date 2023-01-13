@@ -11,7 +11,7 @@ function App() {
   const [addingNewWave, setAddingNewWave] = useState(false);
   const {
     waves,
-    selectedWaveName,
+    selectedWaveId,
     handleSinglebitToggle,
     handleMultibitValueUpdate,
     handleWaveDeselect,
@@ -48,7 +48,7 @@ function App() {
       {waves.length > 0 && (
         <WaveDisplayArea
           waves={waves}
-          selectedWave={selectedWaveName}
+          selectedWave={selectedWaveId}
           config={waveCanvasConfig}
           onSelect={waveSelectHandler}
           onToggleWaveValue={handleSinglebitToggle}

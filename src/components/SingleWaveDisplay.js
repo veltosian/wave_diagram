@@ -20,7 +20,7 @@ const SingleWaveDisplay = (props) => {
   const selectedStyle = selected ? styles.selected : "";
 
   const handleWaveDelete = () => {
-    props.onWaveDelete(wave.name);
+    props.onWaveDelete(wave.id);
   };
 
   const handleMultibitWaveClick = (action) => {
@@ -54,7 +54,7 @@ const SingleWaveDisplay = (props) => {
           onClose={closeMultibitEdit}
           coordinates={multibitEditCoordinates}
           defaultValue={multibitValueDefault}
-          waveName={wave.name}
+          waveId={wave.id}
           sequenceIndex={multibitSequenceIndex}
           onUpdate={props.onMultibitValueUpdate}
         />

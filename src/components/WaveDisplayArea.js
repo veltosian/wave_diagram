@@ -22,8 +22,8 @@ const WaveDisplayArea = (props) => {
       {waves.map((wave, index) => {
         return (
           <SingleWaveDisplay
-            selected={selectedWave === wave.name}
-            key={wave.name}
+            selected={selectedWave === wave.id}
+            key={wave.id}
             wave={wave}
             config={config}
             onSelect={props.onSelect}

@@ -40,7 +40,7 @@ const MultibitEdit = (props) => {
 
   const handleValueUpdate = () => {
     const sequenceIndex = props.sequenceIndex;
-    props.onUpdate(props.waveName, sequenceIndex, multibitValue);
+    props.onUpdate(props.waveId, sequenceIndex, multibitValue);
     props.onClose();
   };
 

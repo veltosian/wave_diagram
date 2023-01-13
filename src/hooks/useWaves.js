@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import WaveLogicTypes from "../types/WaveLogicTypes";
+import { v4 as uuidv4 } from "uuid";
 
 const useWaves = () => {
   const [waves, setWaves] = useState([
     {
+      id: uuidv4(),
       name: "wave2",
       period: 1,
       type: WaveLogicTypes.Clock,
       sequence: ["0", "0", "0", "0", "0", "0", "0", "0", "1", "0"],
     },
     {
+      id: uuidv4(),
       name: "wave1",
       period: 1,
       type: WaveLogicTypes.Clock,
@@ -21,7 +24,7 @@ const useWaves = () => {
     waveHeight: 70,
   });
 
-  const [selectedWaveName, setSelectedWaveName] = useState(null);
+  const [selectedWaveId, setSelectedWaveId] = useState(null);
 
   useEffect(() => {
     if (waves.length === 0) {
@@ -37,18 +40,18 @@ const useWaves = () => {
     });
   }, [waves]);
 
-  const waveSelectHandler = (name) => {
-    setSelectedWaveName(name);
+  const waveSelectHandler = (id) => {
+    setSelectedWaveId(id);
   };
 
   const handleWaveDeselect = () => {
-    setSelectedWaveName(null);
+    setSelectedWaveId(null);
   };
 
   const updateWaveValue = (wave, sequenceIndex, newValue) => {
     setWaves((prevWaves) => {
       return prevWaves.map((prevWave) => {
-        if (prevWave.name === wave.name) {
+        if (prevWave.id === wave.id) {
           const newWave = { ...prevWave, sequence: [...prevWave.sequence] };
           newWave.sequence[sequenceIndex] = newValue;
           return newWave;
@@ -59,8 +62,8 @@ const useWaves = () => {
     });
   };
 
-  const handleSinglebitToggle = (name, sequenceIndex) => {
-    const wave = getWaveFromName(name);
+  const handleSinglebitToggle = (id, sequenceIndex) => {
+    const wave = getWaveFromName(id);
     const newValue = toggleSingleBit(wave.sequence[sequenceIndex]);
     updateWaveValue(wave, sequenceIndex, newValue);
   };
@@ -79,8 +82,8 @@ const useWaves = () => {
     }
   };
 
-  const handleMultibitValueUpdate = (waveName, sequenceIndex, newValue) => {
-    const wave = getWaveFromName(waveName);
+  const handleMultibitValueUpdate = (id, sequenceIndex, newValue) => {
+    const wave = getWaveFromName(id);
     updateWaveValue(wave, sequenceIndex, newValue);
   };
 
@@ -90,17 +93,17 @@ const useWaves = () => {
     });
   };
 
-  const onWaveDeleteHandler = (name) => {
+  const onWaveDeleteHandler = (id) => {
     setWaves((prevWaves) => {
-      return prevWaves.filter((wave) => wave.name !== name);
+      return prevWaves.filter((wave) => wave.id !== id);
     });
   };
 
-  const getWaveFromName = (name) => {
-    const wave = waves.find((wave) => wave.name === name);
+  const getWaveFromName = (id) => {
+    const wave = waves.find((wave) => wave.id === id);
 
     if (!wave) {
-      console.error(`Error: Could not find wave with name ${name}`);
+      console.error(`Error: Could not find wave with name ${id}`);
       return;
     }
 
@@ -112,7 +115,7 @@ const useWaves = () => {
     setWaves,
     waveCanvasConfig,
     setWaveCanvasConfig,
-    selectedWaveName,
+    selectedWaveId,
     handleWaveDeselect,
     handleAddWave,
     onWaveDeleteHandler,
