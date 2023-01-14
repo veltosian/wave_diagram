@@ -16,7 +16,9 @@ function waveStateReducer(state, action) {
         name: action.value,
       };
     case "updateSequence":
-      const trimmedSequence = action.value.replace(/\s/g, "");
+      const trimmedSequence = action.value
+        .replace(/\s/g, "")
+        .replace(/,*$/, "");
       const sequence = trimmedSequence.split(",");
       return {
         ...state,

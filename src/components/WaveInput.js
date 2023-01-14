@@ -11,7 +11,7 @@ const checkValidName = (name) => {
 };
 
 const checkValidSequenceFormat = (sequence) => {
-  const validFormat = /^\s*\d+(\s*,\s*\d+)*\s*$/;
+  const validFormat = /^\s*\w+(\s*,\s*\w+)*\s*,*$/;
   return validFormat.test(sequence);
 };
 

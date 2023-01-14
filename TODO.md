@@ -28,7 +28,6 @@
 - [] Select wave when SingleWaveDisplay is clicked, not just the WaveCanvas
 - [] When zooming way out, the waves start to look like just a single line (which is fine) but the number values for multi-bit signals are still there overlapped with the line and each other. Do not show multi-bit values when width is below some threshold
 - [] Make long names look less bad
-- [] Make it so a trailing comma in the New Wave Sequence field is okay and handled
 
 ## Cleanup
 
@@ -49,3 +48,4 @@
 - [x] Update multibitEdit component to show a clickable button that lets you submit the change instead of solely relying on the enter key
 - [x] Refactor App.js. Take out a lot of the logic into custom hooks and/or take that logic into a sub-component
 - [x] Remove delay to show that a sequence has been put in correct in WaveInput.js. Shoudl take a second to show that it is bad but instantly show if it is good
+- [x] Make it so a trailing comma in the New Wave Sequence field is okay and handled
