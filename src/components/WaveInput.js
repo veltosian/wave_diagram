@@ -45,20 +45,23 @@ const WaveInput = (props) => {
   }, [waveName, waveType, wavePeriod, waveStateDispatch]);
 
   useEffect(() => {
-    const checkWaveSequence = setTimeout(() => {
-      if (
-        !checkValidSequenceFormat(waveSequence) &&
-        waveSequence.trim().length !== 0
-      ) {
+    let checkWaveSequence = null;
+    if (
+      checkValidSequenceFormat(waveSequence) ||
+      waveSequence.trim().length === 0
+    ) {
+      setValidSequenceFormat(true);
+      waveStateDispatch({ type: "updateSequence", value: waveSequence });
+    } else {
+      checkWaveSequence = setTimeout(() => {
         setValidSequenceFormat(false);
-      } else {
-        setValidSequenceFormat(true);
-        waveStateDispatch({ type: "updateSequence", value: waveSequence });
-      }
-    }, debounceTime);
+      }, debounceTime);
+    }
 
     return () => {
-      clearTimeout(checkWaveSequence);
+      if (checkWaveSequence) {
+        clearTimeout(checkWaveSequence);
+      }
     };
   }, [waveSequence, waveStateDispatch]);
 

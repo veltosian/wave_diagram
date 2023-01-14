@@ -2,6 +2,8 @@
 
 ## Features
 
+- [] Make WaveInput a drawer on the left side of the screen
+  - Consider making it a button at the bottom of the waveform list??? eh, maybe not. But think on it
 - [] Add wave edit button
 - [] Add wave edit functionality
 - [] Allow user to edit a wave form after creation
@@ -14,12 +16,9 @@
 - [] Continue the wave to the end of the screen at the end of the sequence
 - [] Make incorrect wave parameter alert in WaveInput a CSS animation card shake with a red X somewhere and a message appearing that indicates the incorrect wave parameters
 - [] Allow wave to be dependent on another
-- [] Make WaveInput a drawer on the left side of the screen
-  - Consider making it a button at the bottom of the waveform list??? eh, maybe not. But think on it
 - [] Dynamically determine wave height in the canvases
 - [] Only show one value on multi-bit signals when the value is unchanged for 2 or more cycles
 - [] Select portion of a wave and drag it to the left or the right. Overwriting one side and extending the other
-- [] Remove delay to show that a sequence has been put in correct in WaveInput.js. Shoudl take a second to show that it is bad but instantly show if it is good
 
 ## Bugs
 
@@ -34,7 +33,6 @@
 ## Cleanup
 
 - [] Add a uuid to each wave and use that instead of name everywhere that I need unique identifier
-- [] Refactor App.js. Take out a lot of the logic into custom hooks and/or take that logic into a sub-component
 
 ## Done
 
@@ -49,3 +47,5 @@
 - [x] Create wave-actions drawer (edit, delete, etc)
 - [x] Allow user to change value on wave by clicking on the value to change
 - [x] Update multibitEdit component to show a clickable button that lets you submit the change instead of solely relying on the enter key
+- [x] Refactor App.js. Take out a lot of the logic into custom hooks and/or take that logic into a sub-component
+- [x] Remove delay to show that a sequence has been put in correct in WaveInput.js. Shoudl take a second to show that it is bad but instantly show if it is good
