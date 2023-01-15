@@ -100,7 +100,6 @@ const useWaves = () => {
       );
       if (oldWaveIndex > -1) {
         // Edit old wave
-        console.log(`Updating an old wave with id: ${updatedWave.id}`); // zy debug remove
         const tempWaves = [...prevWaves];
         tempWaves.splice(oldWaveIndex, 1, updatedWave);
         return [...tempWaves];
