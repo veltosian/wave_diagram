@@ -87,13 +87,30 @@ const useWaves = () => {
     updateWaveValue(wave, sequenceIndex, newValue);
   };
 
-  const handleAddWave = (newWave) => {
+  const handleWaveAdd = (newWave) => {
     setWaves((prevWaves) => {
       return [newWave, ...prevWaves];
     });
   };
 
-  const onWaveDeleteHandler = (id) => {
+  const handleWaveEdit = (updatedWave) => {
+    setWaves((prevWaves) => {
+      const oldWaveIndex = prevWaves.findIndex(
+        (wave) => wave.id === updatedWave.id
+      );
+      if (oldWaveIndex > -1) {
+        // Edit old wave
+        console.log(`Updating an old wave with id: ${updatedWave.id}`); // zy debug remove
+        const tempWaves = [...prevWaves];
+        tempWaves.splice(oldWaveIndex, 1, updatedWave);
+        return [...tempWaves];
+      }
+      console.error(`Could not find wave with id: ${updatedWave.id}`);
+      return [...prevWaves];
+    });
+  };
+
+  const handleWaveDelete = (id) => {
     setWaves((prevWaves) => {
       return prevWaves.filter((wave) => wave.id !== id);
     });
@@ -117,8 +134,9 @@ const useWaves = () => {
     setWaveCanvasConfig,
     selectedWaveId,
     handleWaveDeselect,
-    handleAddWave,
-    onWaveDeleteHandler,
+    handleWaveAdd,
+    handleWaveEdit,
+    handleWaveDelete,
     waveSelectHandler,
     handleSinglebitToggle,
     handleMultibitValueUpdate,

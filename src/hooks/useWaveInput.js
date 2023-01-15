@@ -11,10 +11,10 @@ const waveTypeLabelToWaveLogicType = {
 
 function waveStateReducer(state, action) {
   switch (action.type) {
-    case "newId":
+    case "updateId":
       return {
         ...state,
-        id: uuidv4(),
+        id: action.value,
       };
     case "updateName":
       return {
@@ -68,7 +68,7 @@ const useWaveInput = (wave) => {
   };
 
   const generateNewId = () => {
-    waveStateDispatch({ type: "newId" });
+    waveStateDispatch({ type: "updateId", value: uuidv4() });
   };
 
   return {

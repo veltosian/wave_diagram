@@ -16,8 +16,9 @@ function App() {
     handleMultibitValueUpdate,
     handleWaveDeselect,
     waveCanvasConfig,
-    handleAddWave,
-    onWaveDeleteHandler,
+    handleWaveAdd,
+    handleWaveEdit,
+    handleWaveDelete,
     waveSelectHandler,
   } = useWaves();
 
@@ -37,7 +38,7 @@ function App() {
             <WaveInput
               variant={"addNew"}
               onClose={handleCloseNewWaveClick}
-              onAddWave={handleAddWave}
+              onAddWave={handleWaveAdd}
               waves={waves}
               initialWave={new Wave()}
             />
@@ -49,12 +50,13 @@ function App() {
       {waves.length > 0 && (
         <WaveDisplayArea
           waves={waves}
-          selectedWave={selectedWaveId}
+          selectedWaveId={selectedWaveId}
           config={waveCanvasConfig}
           onSelect={waveSelectHandler}
           onToggleWaveValue={handleSinglebitToggle}
           onMultibitValueUpdate={handleMultibitValueUpdate}
-          onWaveDelete={onWaveDeleteHandler}
+          onWaveDelete={handleWaveDelete}
+          onWaveEdit={handleWaveEdit}
           onWaveDeselect={handleWaveDeselect}
         />
       )}

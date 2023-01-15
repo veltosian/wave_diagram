@@ -40,6 +40,7 @@ const WaveInput = (props) => {
   } = useWaveInput();
 
   useEffect(() => {
+    waveStateDispatch({ type: "updateId", value: props.initialWave.id });
     waveStateDispatch({ type: "updateName", value: waveName });
     waveStateDispatch({ type: "updateType", value: waveType });
     waveStateDispatch({ type: "updatePeriod", value: wavePeriod });
@@ -107,11 +108,15 @@ const WaveInput = (props) => {
     const { result: isValid, msg } = isValidWaveState();
     if (isValid) {
       const newWave = getNewWave(waveName, waveType, wavePeriod, waveSequence);
-      props.onAddWave(newWave);
       if (props.variant === "addNew") {
+        props.onAddWave(newWave);
         generateNewId();
         setWaveName("");
         setWaveSequence("");
+      }
+
+      if (props.variant === "edit") {
+        props.onEditWave(newWave);
       }
     } else {
       alert(`Invalid wave parameters: ${msg}`);

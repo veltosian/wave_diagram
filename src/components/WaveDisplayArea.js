@@ -4,25 +4,24 @@ import SingleWaveDisplay from "./SingleWaveDisplay";
 import WaveEditDrawer from "./WaveEditDrawer";
 
 const WaveDisplayArea = (props) => {
-  const { waves, config, selectedWave } = props;
-
-  const [editDrawerWave, setEditDrawerWave] = useState(null);
+  const { waves, config, selectedWaveId } = props;
 
   const handleWaveDeselect = () => {
     props.onWaveDeselect();
   };
 
-  const handleEditDrawerOpen = (wave) => {
-    setEditDrawerWave(wave);
-  };
-
   return (
     <Card onClickOutside={handleWaveDeselect}>
-      {selectedWave && <WaveEditDrawer />}
+      {selectedWaveId && (
+        <WaveEditDrawer
+          wave={waves.find((wave) => wave.id === selectedWaveId)}
+          onWaveEdit={props.onWaveEdit}
+        />
+      )}
       {waves.map((wave, index) => {
         return (
           <SingleWaveDisplay
-            selected={selectedWave === wave.id}
+            selected={selectedWaveId === wave.id}
             key={wave.id}
             wave={wave}
             config={config}
