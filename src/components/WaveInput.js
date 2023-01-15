@@ -186,6 +186,7 @@ const WaveInput = (props) => {
             type="number"
             id="wave-period"
             value={wavePeriod}
+            step="any"
             onChange={handlePeriodChange}
           />
         </span>
