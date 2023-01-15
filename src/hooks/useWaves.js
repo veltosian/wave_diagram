@@ -113,6 +113,7 @@ const useWaves = () => {
     setWaves((prevWaves) => {
       return prevWaves.filter((wave) => wave.id !== id);
     });
+    setSelectedWaveId(null);
   };
 
   const getWaveFromName = (id) => {
