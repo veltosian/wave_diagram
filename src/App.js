@@ -35,10 +35,11 @@ function App() {
         {addingNewWave ? (
           <div>
             <WaveInput
+              variant={"addNew"}
               onClose={handleCloseNewWaveClick}
               onAddWave={handleAddWave}
               waves={waves}
-              initialWave={new Wave()} // zy debug fix
+              initialWave={new Wave()}
             />
           </div>
         ) : (

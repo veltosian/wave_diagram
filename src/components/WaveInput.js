@@ -36,6 +36,7 @@ const WaveInput = (props) => {
     setIsUniqueName,
     getWaveTypeLabel,
     getNewWave,
+    generateNewId,
   } = useWaveInput();
 
   useEffect(() => {
@@ -107,8 +108,11 @@ const WaveInput = (props) => {
     if (isValid) {
       const newWave = getNewWave(waveName, waveType, wavePeriod, waveSequence);
       props.onAddWave(newWave);
-      setWaveName("");
-      setWaveSequence("");
+      if (props.variant === "addNew") {
+        generateNewId();
+        setWaveName("");
+        setWaveSequence("");
+      }
     } else {
       alert(`Invalid wave parameters: ${msg}`);
     }

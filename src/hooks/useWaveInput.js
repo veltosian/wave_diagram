@@ -1,6 +1,7 @@
 import { useState, useReducer } from "react";
 import WaveLogicTypes from "../types/WaveLogicTypes";
 import { Wave } from "../utilities/Wave";
+import { v4 as uuidv4 } from "uuid";
 
 const waveTypeLabelToWaveLogicType = {
   clock: WaveLogicTypes.Clock,
@@ -10,6 +11,11 @@ const waveTypeLabelToWaveLogicType = {
 
 function waveStateReducer(state, action) {
   switch (action.type) {
+    case "newId":
+      return {
+        ...state,
+        id: uuidv4(),
+      };
     case "updateName":
       return {
         ...state,
@@ -61,6 +67,10 @@ const useWaveInput = (wave) => {
     return type;
   };
 
+  const generateNewId = () => {
+    waveStateDispatch({ type: "newId" });
+  };
+
   return {
     waveState,
     waveStateDispatch,
@@ -68,6 +78,7 @@ const useWaveInput = (wave) => {
     setIsUniqueName,
     getWaveTypeLabel,
     getNewWave,
+    generateNewId,
   };
 };
 
