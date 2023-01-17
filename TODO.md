@@ -6,6 +6,9 @@
   - Consider making it a button at the bottom of the waveform list??? eh, maybe not. But think on it
 - [] Add wave edit button
 - [] Add wave edit functionality
+- [] Add ctl+z functionality
+  - [] Implement action history by putting an action on the stack each time an add/delete/edit/etc event happens
+  - [] Save some number of actions (maybe 100?) and make it possible to ctl+z an ctl+shift+z to traverse the command history
 - [] Allow user to edit a wave form after creation
 - [] Add wave type: manual value input (This is current behaviour shown in the app)
 - [] Implement functionality for different types of waves: clock, sequential, combinational, manual value input
