@@ -40,7 +40,6 @@ const WaveInput = (props) => {
   } = useWaveInput();
 
   useEffect(() => {
-    waveStateDispatch({ type: "updateId", value: props.initialWave.id });
     waveStateDispatch({ type: "updateName", value: waveName });
     waveStateDispatch({ type: "updateType", value: waveType });
     waveStateDispatch({ type: "updatePeriod", value: wavePeriod });
@@ -68,11 +67,18 @@ const WaveInput = (props) => {
   }, [waveSequence, waveStateDispatch]);
 
   useEffect(() => {
+    waveStateDispatch({ type: "updateId", value: props.initialWave.id });
     setWaveName(initialName);
     setWaveType(getWaveTypeLabel(initialType));
     setWavePeriod(initialPeriod);
     setWaveSequence(initialSequence.join(", "));
-  }, [initialName, initialType, initialPeriod, initialSequence]);
+  }, [
+    props.initialWave.id,
+    initialName,
+    initialType,
+    initialPeriod,
+    initialSequence,
+  ]);
 
   const validWaveTypes = ["clock", "sequential", "combinational"];
 
