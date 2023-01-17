@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "./UI/Card";
 import SingleWaveDisplay from "./SingleWaveDisplay";
 import WaveEditDrawer from "./WaveEditDrawer";
