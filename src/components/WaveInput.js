@@ -83,8 +83,6 @@ const WaveInput = (props) => {
   const validWaveTypes = ["clock", "sequential", "combinational"];
 
   const handleNameChange = (e) => {
-    const isUnique = checkNameUnique(e.target.value);
-    setIsUniqueName(isUnique);
     setWaveName(e.target.value.trim());
   };
 
@@ -98,11 +96,6 @@ const WaveInput = (props) => {
 
   const handlePeriodChange = (e) => {
     setWavePeriod(e.target.value);
-  };
-
-  const checkNameUnique = (name) => {
-    const existingNames = props.waves.map((wave) => wave.name);
-    return !existingNames.includes(name);
   };
 
   const checkValidType = (type) => {
@@ -157,15 +150,11 @@ const WaveInput = (props) => {
         <span>
           <label htmlFor="nameInput">Name </label>
           <input
-            className={isUniqueName ? "" : styles["invalid-input"]}
             type="text"
             id="nameInput"
             onChange={handleNameChange}
             value={waveName}
           ></input>
-          {!isUniqueName && (
-            <FieldAlert variant="error"> Name is not unique</FieldAlert>
-          )}
         </span>
         <span>
           <label htmlFor="wave-type">Type </label>

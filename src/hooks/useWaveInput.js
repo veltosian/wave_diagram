@@ -51,8 +51,6 @@ const useWaveInput = (wave) => {
     new Wave()
   );
 
-  const [isUniqueName, setIsUniqueName] = useState(true);
-
   const getNewWave = () => {
     return waveState;
   };
@@ -74,8 +72,6 @@ const useWaveInput = (wave) => {
   return {
     waveState,
     waveStateDispatch,
-    isUniqueName,
-    setIsUniqueName,
     getWaveTypeLabel,
     getNewWave,
     generateNewId,
